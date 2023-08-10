@@ -1,5 +1,7 @@
 export default interface IAdmin {
-  email: string;
   id: string;
+  email: string;
+  password: string;
+  vendorId: string;
   token: string;
 }
