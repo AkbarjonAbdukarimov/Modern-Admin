@@ -3,7 +3,7 @@ import './App.css'
 import SignIn from './components/pages/SignIn'
 import { useEffect, useState } from 'react'
 import IAdmin from './interfaces/IAdmin'
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import {
   QueryClient,
@@ -24,12 +24,13 @@ import axios from 'axios'
 import EditCategory from './components/pages/Categories/EditCategory'
 import NewProp from './components/pages/Props/NewProp'
 import EditProp from './components/pages/Props/EditProp'
+import NewPropValue from './components/pages/Props/Values/NewPropValue'
 
 
 const queryClient = new QueryClient()
 export default function App() {
   const [admin, setAdmin] = useState<IAdmin | undefined>()
-  axios.defaults.baseURL = "http://192.168.0.115:3000/api"
+  axios.defaults.baseURL = "http://localhost:3000/api"
   axios.defaults.headers.common['Authorization'] = admin?.token
 
   useEffect(() => {
@@ -55,7 +56,7 @@ export default function App() {
 
                   <Route path='/props' element={<Props />}></Route>
                   <Route path='/props/new' element={<NewProp />}></Route>
-                  <Route path='/props/:propId/values/new' element={<NewProp />}></Route>
+                  <Route path='/props/:propId/values/new' element={<NewPropValue />}></Route>
                   <Route path="/props/edit/:propId" element={<EditProp />} />
                   <Route path="/props/:propId" element={<PropDetails />} />
 

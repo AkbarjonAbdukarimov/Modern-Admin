@@ -4,7 +4,7 @@ import PropValueForm from './PropValueForm'
 function NewPropValue(props) {
     return (
         <div>
-            <PropValueForm />
+            <PropValueForm requestPath='/props/values/new' />
         </div>
     )
 }
