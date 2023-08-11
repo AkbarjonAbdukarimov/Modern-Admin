@@ -1,14 +1,14 @@
 
 import PropValueForm from './PropValueForm'
 
-function NewPropValue(props) {
+const NewPropValue: React.FC = () => {
     return (
         <div>
-            <PropValueForm />
+            <PropValueForm requestPath='/props/values/new' formType='new' />
         </div>
     )
 }
 
-NewPropValue.propTypes = {}
+
 
 export default NewPropValue
