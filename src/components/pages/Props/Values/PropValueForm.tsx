@@ -4,34 +4,46 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import IError from "../../../../interfaces/IError"
 import Errors from "../../../Errors"
+import Value, { value } from "./Value"
 interface IValueForm {
     requestPath: string;
     formType: 'new' | 'edit'
-    propId?: string
+    propId: string,
+    valueId?: string
 }
-const PropValueForm: React.FC<IValueForm> = ({ requestPath, formType, propId }) => {
-    const [name, setName] = useState('')
-    const [label, setLabel] = useState('')
+const PropValueForm: React.FC<IValueForm> = ({ requestPath, formType, propId, valueId }) => {
+    const [prop, setProp] = useState()
+    const [values, setValues] = useState<value[]>([{ id: (Math.random() * 1234567890).toString(), value: '' }])
     const [errs, setError] = useState<IError[] | undefined>()
     const navigate = useNavigate()
     useEffect(() => {
-        if (propId) {
-            axios.get('/props/' + propId).then(res => { setName(res.data.prop.name); setLabel(res.data.prop.label) })
-                .catch(e => setError(prev => {
-                    if (!prev) {
-                        return [error]
-                    }
-                    return [...prev, error]
-                }))
-        }
+
+        axios.get('/props/' + propId).then(res => { setProp(res.data) })
+            .catch(error => setError(prev => {
+                if (!prev) {
+                    return [error]
+                }
+                return [...prev, error]
+            }))
+
     }, [])
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
+        const data = new FormData(e.target)
+
+        const values: string[] = []
+
+        data.forEach((value, key) => {
+            if (key === 'value') {
+                values.push(value.toString())
+            }
+        });
+
         try {
-            const opts = { url: requestPath, method: formType === "edit" ? "put" : "post", data: { prop: { name, label } } }
+            const opts = { url: requestPath, method: formType === "edit" ? "put" : "post", data: { values } }
 
             await axios(opts)
-            navigate('/props')
+            navigate('/props/' + propId)
         } catch (error) {
             if (error instanceof AxiosError) {
 
@@ -44,6 +56,7 @@ const PropValueForm: React.FC<IValueForm> = ({ requestPath, formType, propId }) 
         }
 
     }
+    if (!prop) return <></>
     return (
         <div>
             <form noValidate onSubmit={handleSubmit}>
@@ -59,36 +72,12 @@ const PropValueForm: React.FC<IValueForm> = ({ requestPath, formType, propId }) 
                         }}
                     >
                         <Typography component="h1" variant="h5">
-                            {formType === 'new' ? "New Property" : "Edit Property"}
+                            {formType === 'new' ? `New Values for ${prop.prop.name} Property  ` : "Edit Property"}
                         </Typography>
 
                         <Box sx={{ mt: 1 }}>
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="name"
-                                value={name}
-                                onChange={(e) => {
-                                    setName(e.target.value)
-                                }}
-                                label="Property Name"
-                                name="name"
+                            {values.map(v => <Value key={v.id} setValues={setValues} value={v} />)}
 
-                            />
-                            <TextField
-                                margin="normal"
-                                required
-                                fullWidth
-                                id="label"
-                                value={label}
-                                onChange={(e) => {
-                                    setLabel(e.target.value)
-                                }}
-                                label="Label Type"
-                                name="label"
-
-                            />
 
 
 

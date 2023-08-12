@@ -25,6 +25,7 @@ import EditCategory from './components/pages/Categories/EditCategory'
 import NewProp from './components/pages/Props/NewProp'
 import EditProp from './components/pages/Props/EditProp'
 import NewPropValue from './components/pages/Props/Values/NewPropValue'
+import EditPropValue from './components/pages/Props/Values/EditPropValue'
 
 
 const queryClient = new QueryClient()
@@ -57,6 +58,7 @@ export default function App() {
                   <Route path='/props' element={<Props />}></Route>
                   <Route path='/props/new' element={<NewProp />}></Route>
                   <Route path='/props/:propId/values/new' element={<NewPropValue />}></Route>
+                  <Route path='/props/:propId/values/edit/:valueId' element={<EditPropValue />}></Route>
                   <Route path="/props/edit/:propId" element={<EditProp />} />
                   <Route path="/props/:propId" element={<PropDetails />} />
 
