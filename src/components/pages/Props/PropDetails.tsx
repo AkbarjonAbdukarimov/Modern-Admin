@@ -8,13 +8,8 @@ import IPropValue from "../../../interfaces/Props/IPropValue"
 import IProp from "../../../interfaces/Props/IProp"
 import { SpeedDial, SpeedDialIcon } from "@mui/material"
 interface IPropDetails { prop: IProp, values: IPropValue[] }
-const getProp = (propId: string): Promise<IPropDetails> => axios.get(`/props/${propId}`).then(res => res.data)
-const columns: GridBaseColDef[] = [
-    { field: 'id', headerName: 'ID', width: 250 },
+const getProp = (propId: string): Promise<IPropDetails> => axios.get(`/props/${propId}`).then(res => res.data).catch(e => e)
 
-    { field: 'value', headerName: 'Value', width: 250 },
-
-];
 
 
 
@@ -27,6 +22,23 @@ export default function PropDetails() {
         return <Loading isLoading={isLoading} />
     }
     if (!data) return <></>
+    const columns: GridBaseColDef[] = [
+        { field: 'id', headerName: 'ID', width: 250 },
+
+        { field: 'value', headerName: 'Value', width: 250 },
+        // {
+        //     field: 'Details', headerName: '', width: 150,
+        //     renderCell: (params) => (
+        //         <Link to={`/props/${params.id}`}>Details</Link>
+        //     )
+        // },
+        {
+            field: 'Edit', headerName: '', width: 150,
+            renderCell: (params) => (
+                <Link to={`/props/${propId}/values/edit/${params.id}`}>Edit</Link>
+            )
+        }
+    ];
     return (
         <div>
             <div className="container my-1">

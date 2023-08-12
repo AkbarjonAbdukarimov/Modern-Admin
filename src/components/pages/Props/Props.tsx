@@ -23,8 +23,6 @@ const columns: GridColDef[] = [
         )
     }
 
-    //{ field: 'category', headerName: 'Category', width: 130, valueGetter: params => params.row.category.name },
-    //{ field: 'subcategory', headerName: 'Subcategory', width: 130, valueGetter: params => params.row.subcategory.name },
 
 ];
 export default function Props() {

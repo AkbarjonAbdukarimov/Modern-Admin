@@ -5,14 +5,13 @@ import { useNavigate } from "react-router-dom"
 import IError from "../../../../interfaces/IError"
 import Errors from "../../../Errors"
 import Value, { value } from "./Value"
-import ISubcategory from "../../../../interfaces/ISubcategory"
 interface IValueForm {
     requestPath: string;
     formType: 'new' | 'edit'
     propId: string,
     valueId?: string
 }
-const PropValueForm: React.FC<IValueForm> = ({ requestPath, formType, propId }) => {
+const PropValueForm: React.FC<IValueForm> = ({ requestPath, formType, propId, valueId }) => {
     const [prop, setProp] = useState()
     const [values, setValues] = useState<value[]>([{ id: (Math.random() * 1234567890).toString(), value: '' }])
     const [errs, setError] = useState<IError[] | undefined>()
