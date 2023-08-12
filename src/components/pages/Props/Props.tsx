@@ -35,7 +35,7 @@ export default function Props() {
     return (
         <>
             <div className="container my-1">
-                <h1> All Properties</h1>
+                <h1>All Properties</h1>
             </div>
             <div style={{ height: 400, width: '100%' }}>
 

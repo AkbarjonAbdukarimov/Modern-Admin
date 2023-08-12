@@ -23,7 +23,6 @@ const ProductTable: FunctionComponent<ProductTableProps> = ({ data }) => {
         <DataGrid
             rows={data.products}
             columns={columns}
-
         />
     </div>;
 }

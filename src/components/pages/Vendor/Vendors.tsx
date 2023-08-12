@@ -1,45 +1,41 @@
-import { Link, useParams } from 'react-router-dom'
-import { useQuery } from 'react-query'
-import Loading from '../../Loading'
-import { SpeedDial, SpeedDialIcon } from '@mui/material'
 import axios from 'axios'
-import ICategory from '../../../interfaces/ICategory'
-import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import React, { useEffect, useState } from 'react'
+import IVendor from "../../../interfaces/Vendor/IVendor"
+import { useQuery } from 'react-query'
 import IError from '../../../interfaces/IError'
-import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { GridColDef, DataGrid } from '@mui/x-data-grid'
+import { Button, SpeedDial, SpeedDialIcon } from '@mui/material';
 import Errors from '../../Errors'
+import Loading from '../../Loading'
+const getCategories = () => axios.get('/vendors')
+// const getVendors = (id: string): Promise<IVendor> => axios.get(`/categories/${id}`).then((response) => response.data)
 
-type Categories = { id: string, name: string }
 
-const getCategory = (id: string): Promise<ICategory> => axios.get(`/categories/${id}`).then((response) => response.data)
-export default function Category() {
+export const Vendors = () => {
     const [errs, setErrs] = useState<IError[] | undefined>()
-    const { id } = useParams()
-    const { isLoading, data, refetch } = useQuery<ICategory>(['catecody', id], () => getCategory(id))
-
-    if (isLoading) {
-        return <Loading isLoading={isLoading} />
-    }
-
+    const { isLoading, data, refetch } = useQuery(['vendors'], getCategories)
+    useEffect(() => {
+        refetch()
+    }, [])
     function handleDelete(id: string) {
-        axios.delete('/categories/' + id).then(res => {
+        axios.delete('/vendors/' + id).then(res => {
             return refetch()
         }).catch(e => setErrs(e))
     }
-
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 250 },
-        { field: 'name', headerName: 'Category Name', width: 150 },
+        { field: 'name', headerName: 'Vendor Name', width: 150 },
         {
             field: 'Details', headerName: '', width: 150,
             renderCell: (params) => (
-                <Link to={`/categories/${id}/subcategory/${params.id}`}>Details</Link>
+                <Link to={`/vendors/${params.id}`}>Details</Link>
             )
         },
         {
             field: 'Edit', headerName: '', width: 150,
             renderCell: (params) => (
-                <Link to={`/categories/edit/${params.id}`}>Edit</Link>
+                <Link to={`/vendors/edit/${params.id}`}>Edit</Link>
             )
         },
         {
@@ -53,19 +49,19 @@ export default function Category() {
                 </Link>
             )
         },
-
     ];
-d
-    return (
 
-        <div className='row justify-content-center mt-3 w-100'>
+    if (isLoading) return <Loading isLoading={isLoading} />
+
+    return (
+        <div style={{ height: 400, width: '100%' }}>
             <DataGrid
-                rows={data?.subcategories}
+                rows={data?.data}
                 columns={columns}
                 autoHeight={true}
             />
             <Errors errs={errs} />
-            <Link to={`/categories/${id}/new`}>
+            <Link to='/vendors/new'>
                 <SpeedDial
                     ariaLabel="SpeedDial basic example"
                     sx={{ position: 'absolute', bottom: 16, right: 16 }}
