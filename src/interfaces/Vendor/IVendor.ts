@@ -1,3 +1,4 @@
+import IProduct from "../Product/IProduct";
 import IVendorContacts from "./IVendorContacts";
 
 export default interface IVendor {
@@ -5,5 +6,5 @@ export default interface IVendor {
   name: string;
   description: string;
   contacts: IVendorContacts;
-  products: string[];
+  products: IProduct[];
 }

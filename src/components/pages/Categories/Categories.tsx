@@ -16,10 +16,7 @@ export default function Categories() {
     useEffect(() => {
         refetch()
     }, [])
-    const { isLoading, data, refetch } = useQuery(['categories'], getCategories,)
-    const [selectedItems, setSelectedItems] = useState([])
-
-
+    const { isLoading, data, refetch } = useQuery(['categories'], getCategories)
 
     const columns: GridColDef<Categories>[] = [
         { field: 'id', headerName: 'ID', width: 250 },
@@ -40,7 +37,7 @@ export default function Categories() {
             field: 'Delete', headerName: '', width: 150,
             renderCell: (params) => (
                 <Link
-
+                    to={""}
                     onClick={() => { handleDelete(params.id); }}
 
                 >
@@ -60,21 +57,13 @@ export default function Categories() {
         return <Loading isLoading={isLoading} />
     }
 
+   
+
     return <div style={{ height: 400, width: '100%' }}>
         <DataGrid
-            rows={data.data}
+            rows={data?.data}
             columns={columns}
-            // initialState={{
-            //     pagination: {
-            //         paginationModel: { page: 0, pageSize: 2 },
-            //     },
-            // }}
             autoHeight={true}
-        // checkboxSelection
-        // onRowSelectionModelChange={(newRowSelectionModel) => {
-        //     setSelectedItems(newRowSelectionModel)
-        // }}
-
         />
         <Errors errs={errs} />
         <Link to='/categories/new'>

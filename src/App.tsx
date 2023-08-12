@@ -26,12 +26,18 @@ import NewProp from './components/pages/Props/NewProp'
 import EditProp from './components/pages/Props/EditProp'
 import NewPropValue from './components/pages/Props/Values/NewPropValue'
 import EditPropValue from './components/pages/Props/Values/EditPropValue'
+import { Vendors } from './components/pages/Vendor/Vendors'
+import { Vendor } from './components/pages/Vendor/Vendor'
+import NewVendor from './components/pages/Vendor/NewVendor'
+import { EditVendor } from './components/pages/Vendor/EditVendor'
 
 
 const queryClient = new QueryClient()
 export default function App() {
   const [admin, setAdmin] = useState<IAdmin | undefined>()
+
   axios.defaults.baseURL = "http://localhost:3000/api"
+
   axios.defaults.headers.common['Authorization'] = admin?.token
 
   useEffect(() => {
@@ -67,7 +73,12 @@ export default function App() {
                   <Route path="/categories/edit/:id" element={<EditCategory />} />
                   <Route path="/categories/:id" element={<Category />} />
                   <Route path="/categories/:id/new" element={<NewSubcategory />} />
-                  <Route path="/categories/:catId/subcategory/:subCtId" element={<Subcategory />} />
+                  <Route path="/categories/:catId/subcategory/:subCtId" element={<Subcategory />} />\
+
+                  <Route path="/vendors" element={<Vendors />} />
+                  <Route path="/vendors/:id" element={<Vendor />} />
+                  <Route path="/vendors/new" element={<NewVendor />} />
+                  <Route path="/vendors/edit/:id" element={<EditVendor />} />
                 </Routes>
               </BrowserRouter>
             </>}
