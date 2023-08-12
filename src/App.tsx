@@ -29,7 +29,7 @@ import EditProp from './components/pages/Props/EditProp'
 const queryClient = new QueryClient()
 export default function App() {
   const [admin, setAdmin] = useState<IAdmin | undefined>()
-  axios.defaults.baseURL = "http://192.168.100.6:3001/api"
+  axios.defaults.baseURL = "http://192.168.0.105:3001/api"
   axios.defaults.headers.common['Authorization'] = admin?.token
 
   useEffect(() => {

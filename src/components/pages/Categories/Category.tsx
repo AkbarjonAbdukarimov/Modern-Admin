@@ -4,10 +4,18 @@ import Loading from '../../Loading'
 import { SpeedDial, SpeedDialIcon } from '@mui/material'
 import axios from 'axios'
 import ICategory from '../../../interfaces/ICategory'
+import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import IError from '../../../interfaces/IError'
+import { useState } from 'react'
+import Errors from '../../Errors'
+
+type Categories = { id: string, name: string }
+
 const getCategory = (id: string): Promise<ICategory> => axios.get(`/categories/${id}`).then((response) => response.data)
 export default function Category() {
+    const [errs, setErrs] = useState<IError[] | undefined>()
     const { id } = useParams()
-    const { isLoading, data } = useQuery<ICategory>(['catecody', id], () => getCategory(id))
+    const { isLoading, data, refetch } = useQuery<ICategory>(['catecody', id], () => getCategory(id))
 
     if (isLoading) {
         return <Loading isLoading={isLoading} />
@@ -16,10 +24,46 @@ export default function Category() {
     if (!data) {
         return <></>
     }
+
+    function handleDelete(id: string) {
+        axios.delete('/categories/' + id).then(res => {
+            return refetch()
+        }).catch(e => setErrs(e))
+    }
+
+    const columns: GridColDef<Categories>[] = [
+        { field: 'id', headerName: 'ID', width: 250 },
+        { field: 'name', headerName: 'Category Name', width: 150 },
+        {
+            field: 'Details', headerName: '', width: 150,
+            renderCell: (params) => (
+                <Link to={`/categories/${id}/subcategory/${params.id}`}>Details</Link>
+            )
+        },
+        {
+            field: 'Edit', headerName: '', width: 150,
+            renderCell: (params) => (
+                <Link to={`/categories/edit/${params.id}`}>Edit</Link>
+            )
+        },
+        {
+            field: 'Delete', headerName: '', width: 150,
+            renderCell: (params) => (
+                <Link
+                    to={""}
+                    onClick={() => { handleDelete(params.id); }}
+                >
+                    Delete
+                </Link>
+            )
+        },
+
+    ];
+
     return (
 
         <div className='row justify-content-center mt-3 w-100'>
-            <div className="col-4">
+            {/* <div className="col-4">
                 <div className='d-flex justify-content-evenly py-2'>
                     <h1>{data.name}
                     </h1>
@@ -38,8 +82,23 @@ export default function Category() {
 
                 </div>
                 <h3></h3>
+            </div> */}
+            <DataGrid
+                rows={data?.subcategories}
+                columns={columns}
+                // initialState={{
+                //     pagination: {
+                //         paginationModel: { page: 0, pageSize: 2 },
+                //     },
+                // }}
+                autoHeight={true}
+            // checkboxSelection
+            // onRowSelectionModelChange={(newRowSelectionModel) => {
+            //     setSelectedItems(newRowSelectionModel)
+            // }}
 
-            </div>
+            />
+            <Errors errs={errs} />
             <Link to={`/categories/${id}/new`}>
                 <SpeedDial
                     ariaLabel="SpeedDial basic example"

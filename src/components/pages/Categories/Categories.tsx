@@ -17,7 +17,6 @@ export default function Categories() {
         refetch()
     }, [])
     const { isLoading, data, refetch } = useQuery(['categories'], getCategories,)
-    const [selectedItems, setSelectedItems] = useState([])
 
 
 
@@ -40,7 +39,7 @@ export default function Categories() {
             field: 'Delete', headerName: '', width: 150,
             renderCell: (params) => (
                 <Link
-
+                    to={""}
                     onClick={() => { handleDelete(params.id); }}
 
                 >
@@ -62,7 +61,7 @@ export default function Categories() {
 
     return <div style={{ height: 400, width: '100%' }}>
         <DataGrid
-            rows={data.data}
+            rows={data?.data}
             columns={columns}
             // initialState={{
             //     pagination: {
