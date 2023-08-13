@@ -15,7 +15,7 @@ const getCategory = (id: string): Promise<ICategory> => axios.get(`/categories/$
 export default function Category() {
     const [errs, setErrs] = useState<IError[] | undefined>()
     const { id } = useParams()
-    const { isLoading, data, refetch } = useQuery<ICategory>(['catecody', id], () => getCategory(id))
+    const { isLoading, data, refetch } = useQuery<ICategory>(['category', id], () => getCategory(id))
 
     if (isLoading) {
         return <Loading isLoading={isLoading} />
@@ -55,10 +55,14 @@ export default function Category() {
         },
 
     ];
-d
+
     return (
 
-        <div className='row justify-content-center mt-3 w-100'>
+        <div className=' row justify-content-center mt-3 w-100'>
+            <div className="my-2 d-flex justify-content-center align-items-center">
+                <h3 className='mx-2'>{data?.name}</h3>
+                <div className='mx-2'><img style={{ width: "45px" }} src={'https://ik.imagekit.io/z6k3ktb71/' + data?.icon?.name} alt="" /></div>
+            </div>
             <DataGrid
                 rows={data?.subcategories}
                 columns={columns}

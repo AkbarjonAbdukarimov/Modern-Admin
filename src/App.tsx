@@ -30,6 +30,8 @@ import { Vendors } from './components/pages/Vendor/Vendors'
 import { Vendor } from './components/pages/Vendor/Vendor'
 import NewVendor from './components/pages/Vendor/NewVendor'
 import { EditVendor } from './components/pages/Vendor/EditVendor'
+import Admins from './components/pages/Admins/Admins'
+import NewAdmin from './components/pages/Admins/NewAdmin'
 
 
 const queryClient = new QueryClient()
@@ -60,6 +62,9 @@ export default function App() {
                 <Routes>
                   <Route exact={true} path="/" element={<Products />} />
                   <Route path="/products/new" element={<NewProduct />} />
+
+                  <Route path='/admins' element={<Admins />}></Route>
+                  <Route path='/admins/new' element={<NewAdmin />}></Route>
 
                   <Route path='/props' element={<Props />}></Route>
                   <Route path='/props/new' element={<NewProp />}></Route>
