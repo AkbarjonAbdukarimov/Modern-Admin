@@ -1,7 +1,7 @@
-import React from 'react'
+import SubcategoryForm from './Form/SubcategoryForm'
 
 export default function NewSubcategory() {
     return (
-        <div>NewSubcategory</div>
+        <div><SubcategoryForm requestPath='/subcategories/new' formType='new' /></div>
     )
 }

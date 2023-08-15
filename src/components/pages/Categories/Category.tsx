@@ -39,7 +39,7 @@ export default function Category() {
         {
             field: 'Edit', headerName: '', width: 150,
             renderCell: (params) => (
-                <Link to={`/categories/edit/${params.id}`}>Edit</Link>
+                <Link to={`/categories/:${data?.id}/subcategory/edit/${params.id}`}>Edit</Link>
             )
         },
         {

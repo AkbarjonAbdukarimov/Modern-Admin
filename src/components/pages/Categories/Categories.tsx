@@ -57,7 +57,7 @@ export default function Categories() {
         return <Loading isLoading={isLoading} />
     }
 
-   
+
 
     return <div style={{ height: 400, width: '100%' }}>
         <DataGrid

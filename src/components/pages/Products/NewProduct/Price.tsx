@@ -22,24 +22,31 @@ export default function Price({ setPrice, price }: IPriceProps) {
     }
     return (
         <div className='d-flex'>
-            <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+            <FormControl sx={{ m: 1, width: '20ch' }} variant="standard">
                 <InputLabel htmlFor="standard-adornment-min">Minimum Amount</InputLabel>
                 <Input
                     id="standard-adornment-min"
                     name='qtyMin'
                 />
-            </FormControl> <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+            </FormControl> <FormControl sx={{ m: 1, width: '20ch' }} variant="standard">
                 <InputLabel htmlFor="standard-adornment-max">Maximum Amount</InputLabel>
                 <Input
                     id="standard-adornment-max"
                     name='qtyMax'
                 />
             </FormControl>
-            <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
+            <FormControl sx={{ m: 1, width: '20ch' }} variant="standard">
                 <InputLabel htmlFor="standard-adornment-price">Price</InputLabel>
                 <Input
                     id="standard-adornment-price"
                     name='price'
+                />
+            </FormControl>
+            <FormControl sx={{ m: 1, width: '20ch' }} variant="standard">
+                <InputLabel htmlFor="standard-adornment-price">Old Price</InputLabel>
+                <Input
+                    id="standard-adornment-price"
+                    name='oldPrice'
                 />
             </FormControl>
 

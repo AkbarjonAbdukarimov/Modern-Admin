@@ -1,6 +1,16 @@
 import { Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
-import { FunctionComponent, SyntheticEvent, useState } from "react";
+import { FunctionComponent, SyntheticEvent, useEffect, useState } from "react";
 import Price from "./Price";
+import SelectInput from "./SelectInput";
+import axios from "axios";
+import ICategory from "../../../../interfaces/ICategory";
+import { useQuery } from "react-query";
+import ISubcategory from "../../../../interfaces/ISubcategory";
+import Value from "../../Props/Values/Value";
+import Prop from "../../Subcategory/Form/Prop";
+import IPropValue from "../../../../interfaces/Props/IPropValue";
+import { useNavigate } from "react-router-dom";
+import Errors from "../../../Errors";
 
 interface NewProductProps {
 
@@ -12,21 +22,41 @@ export type price = {
     price: number;
     //component: FunctionComponent
 }
-
+const getCategories = () => axios.get<ICategory[]>('/categories').then(res => res.data)
 const NewProduct: FunctionComponent<NewProductProps> = () => {
     const [prices, setPrices] = useState<price[]>([{ id: parseInt((Math.random() * 1234567890).toString()), minQty: 0, maxQty: 0, price: 0 },])
-    function handleSubmit(e: SyntheticEvent) {
-        e.preventDefault()
-        for (let index = 0; index < e.target.length; index++) {
-            const element = e.target[index];
-            console.log(element.name, element.value)
-        }
+    const [selectedCat, setSelectedCat] = useState<ICategory>()
+    const [selectedSubct, setSelectedSubct] = useState<ISubcategory>()
+    const [props, setProps] = useState<ISubcategory>()
+    const [selectedProps, selectProps] = useState<IPropValue[]>([])
+    const [err, setError] = useState<[{ message: string }] | undefined>()
 
+
+    const categories = useQuery(['categories-product'], getCategories)
+    const navigate = useNavigate()
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+
+        const data = new FormData(e.target)
+        data.append('category', selectedCat.id)
+        data.append('subcategory', selectedSubct.id)
+
+        axios.post('/products/new', data).then(res => navigate('/products')).catch(e => setError([...err, e]))
 
     }
+    useEffect(() => {
+        //console.log(selectedSubct)
+        if (selectedSubct) {
+            axios.get(`/subcategories/${selectedSubct.id}`).then(res => { setProps(res.data); })
+
+        }
+    }, [selectedSubct])
+    const handlePropSelection = (prop: IProp) => { selectProps(prev => [...prev, prop]) }
     return <>
         <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
-            <Container component="main" >
+            <Container component="main" sx={{
+
+            }} >
                 <CssBaseline />
 
                 <Box
@@ -35,13 +65,14 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
+                        justifyContent: 'center',
                     }}
                 >
                     <Typography component="h1" variant="h5">
                         New Product
                     </Typography>
 
-                    <Box sx={{ mt: 1 }}>
+                    <Box sx={{ mt: 1, width: '50ch' }}>
                         <TextField
                             margin="normal"
                             required
@@ -56,18 +87,37 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
                             margin="normal"
                             required
                             fullWidth
-                            name="descriptiom"
-                            label="Descriptiom"
-                            type="descriptiom"
-                            id="descriptiom"
+                            name="description"
+                            label="Description"
+                            type="description"
+                            id="description"
                         />
                         <div className="mb-3">
                             <label htmlFor="formFileSm" className="form-label">Select Product Files</label>
-                            <input name="media" className="form-control form-control-sm" id="formFileSm" type="file" multiple />
+                            <input name="media" className="form-control  form-control-sm" id="formFileSm" type="file" multiple />
                         </div>
-                        {prices.map(p => <> <Price key={p.id} setPrice={setPrices} price={p} />
-                        </>)}
 
+                        <div className="mb-3">
+                            {categories && <SelectInput data={categories.data} setSelected={setSelectedCat} requestPath="/categories" label="Categories" />
+                            }
+                        </div>
+
+                        <div className="mb-3">
+                            {selectedCat && <SelectInput setSelected={setSelectedSubct} data={selectedCat.subcategories} label="Subcategories" />}
+
+                        </div>
+                        <div className="mb-3">
+                            {selectedSubct && props &&
+                                <SelectInput removable={false} setSelected={handlePropSelection} data={props.props} label="Properties" />}
+
+                        </div>
+                        <div className="mb-3">
+                            {selectedProps.map(p => <Prop displayItems={2} key={p.id} prop={p} setProps={selectProps} />)}
+                        </div>
+                        <div className="mb-3">
+
+                            {prices.map(p => <Price key={p.id} setPrice={setPrices} price={p} />)}
+                        </div>
 
 
                         <Button
@@ -82,7 +132,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
                     </Box>
                 </Box>
 
-
+                <Errors errs={err} />
             </Container>
 
         </form>

@@ -4,29 +4,55 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid"
 import { Link } from "react-router-dom"
 import axios from "axios"
 import { SpeedDial, SpeedDialIcon } from "@mui/material"
+import Errors from "../../Errors"
+import { useState } from "react"
+import IError from "../../../interfaces/IError"
 
 const getProps = () => axios.get('/props')
-const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Prop Name', width: 150 },
-    { field: 'label', headerName: 'Prop Label', width: 150 },
-    {
-        field: 'Details', headerName: '', width: 150,
-        renderCell: (params) => (
-            <Link to={`/props/${params.id}`}>Details</Link>
-        )
-    },
-    {
-        field: 'Edit', headerName: '', width: 150,
-        renderCell: (params) => (
-            <Link to={`/props/edit/${params.id}`}>Edit</Link>
-        )
-    }
 
-
-];
 export default function Props() {
-    const { isLoading, data } = useQuery(['props'], getProps)
+    const { isLoading, data, refetch } = useQuery(['props'], getProps)
+    const [errs, setErrs] = useState<IError[] | undefined>()
+
+    const columns: GridColDef[] = [
+        { field: 'id', headerName: 'ID', width: 70 },
+        { field: 'name', headerName: 'Prop Name', width: 150 },
+        { field: 'label', headerName: 'Prop Label', width: 150 },
+        {
+            field: 'Details', headerName: '', width: 150,
+            renderCell: (params) => (
+                <Link to={`/props/${params.id}`}>Details</Link>
+            )
+        },
+        {
+            field: 'Edit', headerName: '', width: 150,
+            renderCell: (params) => (
+                <Link to={`/props/edit/${params.id}`}>Edit</Link>
+            )
+        },
+        {
+            field: 'Delete', headerName: '', width: 150,
+            renderCell: (params) => (
+                <Link
+                    to={""}
+                    onClick={() => { handleDelete(params.id); }}
+
+                >
+                    Delete
+                </Link>
+            )
+        },
+
+
+    ];
+
+
+
+    function handleDelete(id: string) {
+        axios.delete('/props/delete/' + id).then(res => {
+            return refetch()
+        }).catch(e => setErrs(e))
+    }
     if (isLoading) {
         return <Loading isLoading={isLoading} />
     }
@@ -50,6 +76,8 @@ export default function Props() {
                     checkboxSelection
                 />
             </div >
+            <Errors errs={errs} />
+
             <Link to={`/props/new`}>
                 <SpeedDial
                     ariaLabel="SpeedDial basic example"
