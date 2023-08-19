@@ -3,6 +3,7 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Errors from "../../Errors";
+import SelectInput from "../../SelectInput";
 
 interface IVendorFormProps {
     formType: "new" | "edit"
@@ -10,7 +11,7 @@ interface IVendorFormProps {
     id?: string
 }
 const VendorForm: React.FunctionComponent<IVendorFormProps> = ({ formType, requestPath, id }) => {
-    const [open, setOpen] = useState(false);
+
     const [err, setError] = useState<[{ message: string }] | undefined>()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
@@ -19,7 +20,7 @@ const VendorForm: React.FunctionComponent<IVendorFormProps> = ({ formType, reque
     useEffect(() => {
         if (id) {
             axios.get('/vendors/' + id).then(res => {
-               
+
                 setName(res.data.name)
                 setDescription(res.data.description)
                 setPhone(res.data.contacts.phoneNumber)
@@ -58,7 +59,7 @@ const VendorForm: React.FunctionComponent<IVendorFormProps> = ({ formType, reque
 
     return <>
         <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
-            <Container component="main" >
+            <Container component="main" sx={{ width: '50ch' }} >
                 <CssBaseline />
 
                 <Box
@@ -81,7 +82,8 @@ const VendorForm: React.FunctionComponent<IVendorFormProps> = ({ formType, reque
                             id="name"
                             name="name"
                             value={name}
-                            onChange={e=>setName(e.target.value)}
+                            label="Vendor Name"
+                            onChange={e => setName(e.target.value)}
                         />
                         <TextField
                             margin="normal"
@@ -90,7 +92,8 @@ const VendorForm: React.FunctionComponent<IVendorFormProps> = ({ formType, reque
                             id="name"
                             name="desc"
                             value={description}
-                            onChange={e=>setDescription(e.target.value)}
+                            label="Vendor Description"
+                            onChange={e => setDescription(e.target.value)}
                         />
                         <TextField
                             margin="normal"
@@ -99,8 +102,10 @@ const VendorForm: React.FunctionComponent<IVendorFormProps> = ({ formType, reque
                             id="name"
                             name="phoneNumber"
                             value={phone}
-                            onChange={e=>setPhone(e.target.value)}
+                            label="Phone Number"
+                            onChange={e => setPhone(e.target.value)}
                         />
+
                         <Button
                             type="submit"
                             fullWidth

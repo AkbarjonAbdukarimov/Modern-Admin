@@ -6,5 +6,5 @@ export default interface IVendor {
   name: string;
   description: string;
   contacts: IVendorContacts;
-  products: IProduct[];
+  products?: IProduct[];
 }

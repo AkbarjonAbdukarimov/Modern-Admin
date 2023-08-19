@@ -26,12 +26,7 @@ export default function PropDetails() {
         { field: 'id', headerName: 'ID', width: 250 },
 
         { field: 'value', headerName: 'Value', width: 250 },
-        // {
-        //     field: 'Details', headerName: '', width: 150,
-        //     renderCell: (params) => (
-        //         <Link to={`/props/${params.id}`}>Details</Link>
-        //     )
-        // },
+
         {
             field: 'Edit', headerName: '', width: 150,
             renderCell: (params) => (
@@ -40,27 +35,44 @@ export default function PropDetails() {
         }
     ];
     return (
-        <div>
-            <div className="container my-1">
-                <h1>{data.prop.name} Property Values</h1>
-            </div>
-            <div style={{ height: 400, width: '100%' }}>
-                <DataGrid
-                    rows={data.values}
-                    columns={columns}
-                    checkboxSelection
-                    autoHeight={true}
+        <>
+            <div style={{ height: "100%" }}>
+                <div className="container my-1">
+                    <h1>{data.prop.name} Property Values</h1>
+                </div>
+                <div >
+                    <DataGrid
+                        rows={data.values}
+                        columns={columns}
+                        checkboxSelection
+                        autoHeight={true}
 
-                />
+                    />
+
+                </div>
 
             </div>
-            <Link to={`/props/${propId}/values/new`}>
-                <SpeedDial
-                    ariaLabel="SpeedDial basic example"
-                    sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                    icon={<SpeedDialIcon />}
-                >
-                </SpeedDial></Link>
-        </div>
+            <div style={{
+                position: 'fixed',
+                right: 0,
+                bottom: 0
+
+            }} >
+                <div style={{
+                    position: 'fixed',
+                    right: 0,
+                    bottom: 0
+
+                }}>
+
+                    <Link to={`/props/${propId}/values/new`}>
+                        <SpeedDial
+                            ariaLabel="SpeedDial basic example"
+                            sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                            icon={<SpeedDialIcon />}
+                        >
+                        </SpeedDial></Link>
+                </div>
+            </div></>
     )
 }

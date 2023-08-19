@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import ISubcategory from '../../../interfaces/ISubcategory'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { Typography } from '@mui/material'
@@ -7,7 +7,11 @@ import axios from 'axios'
 import { useQuery } from 'react-query'
 import { useState } from 'react'
 
-const getSubcategory = (id: string): Promise<ISubcategory> => axios.get(`/subcategories/` + id).then(res => res.data)
+const getSubcategory = (id: string): Promise<ISubcategory> => axios.get(`/subcategories/` + id, {
+    params: {
+        admin: true
+    }
+}).then(res => res.data)
 
 
 const columns: GridColDef<ISubcategory['props']>[] = [
@@ -15,7 +19,18 @@ const columns: GridColDef<ISubcategory['props']>[] = [
     { field: 'name', headerName: 'Name', width: 150, valueGetter: params => params.row.prop.name },
     { field: 'value', headerName: 'Value', width: 250 },
     { field: 'label', headerName: 'Label Name', width: 150, valueGetter: params => params.row.prop.label },
-
+    {
+        field: 'Details', headerName: '', width: 150,
+        renderCell: (params) => (
+            <Link to={`/subcategories/${params.id}`}>Details</Link>
+        )
+    },
+    {
+        field: 'Edit', headerName: '', width: 150,
+        renderCell: (params) => (
+            <Link to={`/subcategories/edit/${params.id}`}>Edit</Link>
+        )
+    },
 ];
 
 export default function Subcategory() {

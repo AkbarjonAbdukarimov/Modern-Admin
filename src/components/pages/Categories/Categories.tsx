@@ -57,7 +57,7 @@ export default function Categories() {
         return <Loading isLoading={isLoading} />
     }
 
-   
+
 
     return <div style={{ height: 400, width: '100%' }}>
         <DataGrid
@@ -66,12 +66,20 @@ export default function Categories() {
             autoHeight={true}
         />
         <Errors errs={errs} />
-        <Link to='/categories/new'>
-            <SpeedDial
-                ariaLabel="SpeedDial basic example"
-                sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                icon={<SpeedDialIcon />}
-            >
-            </SpeedDial></Link>
+        <div style={{
+            position: 'fixed',
+            right: 0,
+            bottom: 0
+
+        }}>
+
+            <Link to='/categories/new'>
+                <SpeedDial
+                    ariaLabel="SpeedDial basic example"
+                    sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                    icon={<SpeedDialIcon />}
+                >
+                </SpeedDial></Link>
+        </div>
     </div>;
 }

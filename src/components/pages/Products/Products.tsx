@@ -19,13 +19,21 @@ const Products: FunctionComponent<ProductsProps> = () => {
   return <>
 
     <ProductTable data={data.data} />
-    <Link to='/products/new'>
-      <SpeedDial
-        ariaLabel="SpeedDial basic example"
-        sx={{ position: 'absolute', bottom: 16, right: 16 }}
-        icon={<SpeedDialIcon />}
-      >
-      </SpeedDial></Link>
+    <div style={{
+      position: 'fixed',
+      right: 0,
+      bottom: 0
+
+    }}>
+
+      <Link to='/products/new'>
+        <SpeedDial
+          ariaLabel="SpeedDial basic example"
+          sx={{ position: 'absolute', bottom: 16, right: 16 }}
+          icon={<SpeedDialIcon />}
+        >
+        </SpeedDial></Link>
+    </div>
   </>;
 }
 

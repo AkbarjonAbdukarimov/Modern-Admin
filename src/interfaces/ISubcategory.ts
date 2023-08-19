@@ -1,7 +1,8 @@
 import IProps from "./Product/IProps";
+import IPropValue from "./Props/IPropValue";
 
 export default interface ISubcategory {
   id: string;
   name: string;
-  props: IProps[];
+  props: IPropValue[];
 }

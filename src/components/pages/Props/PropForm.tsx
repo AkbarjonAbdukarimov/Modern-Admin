@@ -28,8 +28,8 @@ const PropForm: React.FC<IPropForm> = ({ requestPath, formType, propId }) => {
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         try {
-            const opts = { url: requestPath, method: formType === "edit" ? "put" : "post", data: { prop: { name, label } } }
-
+            const opts = { url: requestPath, method: formType === "edit" ? "put" : "post", data: { name, label } }
+            console.log(opts)
             await axios(opts)
             navigate('/props')
         } catch (error) {

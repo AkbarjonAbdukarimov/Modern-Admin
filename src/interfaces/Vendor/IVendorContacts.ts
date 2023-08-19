@@ -1,3 +1,3 @@
 export default interface IVendorContacts {
-  phoneNumber: Number;
+  phoneNumber: number;
 }

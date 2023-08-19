@@ -1,5 +1,6 @@
 const navLinks: Array<NavLink> = [
-  { name: "Products", to: "/" },
+  { name: "Products", to: "/products" },
+  { name: "Admins", to: "/admins" },
   { name: "Categories", to: "/categories" },
   { name: "Vendors", to: "/vendors" },
   { name: "Properties", to: "/props" },

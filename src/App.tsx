@@ -30,6 +30,9 @@ import { Vendors } from './components/pages/Vendor/Vendors'
 import { Vendor } from './components/pages/Vendor/Vendor'
 import NewVendor from './components/pages/Vendor/NewVendor'
 import { EditVendor } from './components/pages/Vendor/EditVendor'
+import Admins from './components/pages/Admins/Admins'
+import NewAdmin from './components/pages/Admins/NewAdmin'
+import EditSubcategory from './components/pages/Subcategory/EditSubcategory'
 
 
 const queryClient = new QueryClient()
@@ -58,8 +61,12 @@ export default function App() {
               <BrowserRouter>
                 <MainAppBar setUser={setAdmin} navlinks={navLinks} />
                 <Routes>
-                  <Route exact={true} path="/" element={<Products />} />
+                  <Route path='/' />
+                  <Route path="/products" element={<Products />} />
                   <Route path="/products/new" element={<NewProduct />} />
+
+                  <Route path='/admins' element={<Admins />}></Route>
+                  <Route path='/admins/new' element={<NewAdmin />}></Route>
 
                   <Route path='/props' element={<Props />}></Route>
                   <Route path='/props/new' element={<NewProp />}></Route>
@@ -70,6 +77,7 @@ export default function App() {
 
                   <Route path="/categories" element={<Categories />} />
                   <Route path="/categories/new" element={<NewCategory />} />
+                  <Route path="/categories/:id/subcategory/edit/:subctId" element={<EditSubcategory />} />
                   <Route path="/categories/edit/:id" element={<EditCategory />} />
                   <Route path="/categories/:id" element={<Category />} />
                   <Route path="/categories/:id/new" element={<NewSubcategory />} />
