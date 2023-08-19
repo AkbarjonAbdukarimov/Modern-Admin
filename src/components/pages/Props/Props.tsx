@@ -77,14 +77,21 @@ export default function Props() {
                 />
             </div >
             <Errors errs={errs} />
+            <div style={{
+                position: 'fixed',
+                right: 0,
+                bottom: 0
 
-            <Link to={`/props/new`}>
-                <SpeedDial
-                    ariaLabel="SpeedDial basic example"
-                    sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                    icon={<SpeedDialIcon />}
-                >
-                </SpeedDial></Link>
+            }}>
+
+                <Link to={`/props/new`}>
+                    <SpeedDial
+                        ariaLabel="SpeedDial basic example"
+                        sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                        icon={<SpeedDialIcon />}
+                    >
+                    </SpeedDial></Link>
+            </div>
         </>
     )
 }

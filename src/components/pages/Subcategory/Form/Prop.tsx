@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const Prop: React.FC<{ prop: IPropValue, setProps: React.Dispatch<React.SetStateAction<IPropValue[]>>, displayItems: 1 | 2 | 3 }> = ({ prop, setProps, displayItems }) => {
 
     return (
-        <div className='d-flex justify-content-evenly align-items-center'>
+        <div className='d-flex justify-content-evenly align-items-center w-100'>
             {displayItems >= 1 && <FormControl sx={{ m: 1, width: '25ch' }} variant="standard">
                 <Typography component="p" variant="h5">
                     {prop.value}

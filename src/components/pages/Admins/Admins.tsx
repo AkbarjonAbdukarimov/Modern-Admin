@@ -55,13 +55,21 @@ const Admins = () => {
                     checkboxSelection
                 />
             </div >
-            <Link to={`/admins/new`}>
-                <SpeedDial
-                    ariaLabel="SpeedDial basic example"
-                    sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                    icon={<SpeedDialIcon />}
-                >
-                </SpeedDial></Link>
+            <div style={{
+                position: 'fixed',
+                right: 0,
+                bottom: 0
+
+            }}>
+
+                <Link to={`/admins/new`}>
+                    <SpeedDial
+                        ariaLabel="SpeedDial basic example"
+                        sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                        icon={<SpeedDialIcon />}
+                    >
+                    </SpeedDial></Link>
+            </div>
         </>
     )
 }

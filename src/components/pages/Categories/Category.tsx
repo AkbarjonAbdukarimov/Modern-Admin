@@ -39,7 +39,7 @@ export default function Category() {
         {
             field: 'Edit', headerName: '', width: 150,
             renderCell: (params) => (
-                <Link to={`/categories/:${data?.id}/subcategory/edit/${params.id}`}>Edit</Link>
+                <Link to={`/categories/${data?.id}/subcategory/edit/${params.id}`}>Edit</Link>
             )
         },
         {
@@ -69,13 +69,21 @@ export default function Category() {
                 autoHeight={true}
             />
             <Errors errs={errs} />
-            <Link to={`/categories/${id}/new`}>
-                <SpeedDial
-                    ariaLabel="SpeedDial basic example"
-                    sx={{ position: 'absolute', bottom: 16, right: 16 }}
-                    icon={<SpeedDialIcon />}
-                >
-                </SpeedDial></Link>
+            <div style={{
+                position: 'fixed',
+                right: 0,
+                bottom: 0
+
+            }}>
+
+                <Link to={`/categories/${id}/new`}>
+                    <SpeedDial
+                        ariaLabel="SpeedDial basic example"
+                        sx={{ position: 'absolute', bottom: 16, right: 16 }}
+                        icon={<SpeedDialIcon />}
+                    >
+                    </SpeedDial></Link>
+            </div>
         </div>
     )
 }

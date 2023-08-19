@@ -38,17 +38,17 @@ export const Vendors = () => {
                 <Link to={`/vendors/edit/${params.id}`}>Edit</Link>
             )
         },
-        {
-            field: 'Delete', headerName: '', width: 150,
-            renderCell: (params) => (
-                <Link
-                    to={""}
-                    onClick={() => { handleDelete(String(params.id)); }}
-                >
-                    Delete
-                </Link>
-            )
-        },
+        // {
+        //     field: 'Delete', headerName: '', width: 150,
+        //     renderCell: (params) => (
+        //         <Link
+        //             to={""}
+        //             onClick={() => { handleDelete(String(params.id)); }}
+        //         >
+        //             Delete
+        //         </Link>
+        //     )
+        // },
     ];
 
     if (isLoading) return <Loading isLoading={isLoading} />

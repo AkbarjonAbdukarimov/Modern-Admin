@@ -50,7 +50,7 @@ export const Vendor = () => {
   function handleDelete(id: string) {
     axios.delete('/vendors/' + id).then(res => {
       return refetch()
-    }).catch(e => setErrs(e))
+    }).catch(e => setErrs([e]))
   }
   if (data) {
     return (
@@ -61,13 +61,20 @@ export const Vendor = () => {
           autoHeight={true}
         />
         <Errors errs={errs} />
-        <Link to={`/vendors/${id}/new`}>
-          <SpeedDial
-            ariaLabel="SpeedDial basic example"
-            sx={{ position: 'absolute', bottom: 16, right: 16 }}
-            icon={<SpeedDialIcon />}
-          >
-          </SpeedDial></Link>
+        {/* <div style={{
+          position: 'fixed',
+          right: 0,
+          bottom: 0
+
+        }}>
+          <Link to={`/vendors/${id}/new`}>
+            <SpeedDial
+              ariaLabel="SpeedDial basic example"
+              sx={{ position: 'absolute', bottom: 16, right: 16 }}
+              icon={<SpeedDialIcon />}
+            >
+            </SpeedDial></Link>
+        </div> */}
       </div>
     )
   }

@@ -1,7 +1,7 @@
 import { Box, Button, Container, CssBaseline, TextField, Typography } from "@mui/material";
 import { FunctionComponent, SyntheticEvent, useEffect, useState } from "react";
 import Price from "./Price";
-import SelectInput from "./SelectInput";
+import SelectInput from "../../../SelectInput";
 import axios from "axios";
 import ICategory from "../../../../interfaces/ICategory";
 import { useQuery } from "react-query";
@@ -54,9 +54,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
     const handlePropSelection = (prop: IProp) => { selectProps(prev => [...prev, prop]) }
     return <>
         <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
-            <Container component="main" sx={{
-
-            }} >
+            <Container component="main"  >
                 <CssBaseline />
 
                 <Box

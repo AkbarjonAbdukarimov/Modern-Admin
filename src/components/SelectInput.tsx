@@ -2,15 +2,15 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Box, CircularProgress, Tooltip, Typography } from '@mui/material';
 
-export default function SelectInput<T>({ label, setSelected, data, removable = true }:
-    { label: string, data: T[] | [], setSelected?: React.Dispatch<React.SetStateAction<T | undefined>>, removable?: boolean }) {
+export default function SelectInput<T>({ label, setSelected, data, removable = true, }:
+    { label: string, data: T[] | [], setSelected: (e: T | null) => void, removable?: boolean, }) {
 
     if (data) {
         return (
             <Autocomplete
                 disablePortal
                 //isOptionEqualToValue={ }
-                onChange={(e, value) => removable && setSelected(value)}
+                onChange={(e, value) => value && setSelected(value)}
                 id="combo-box-demo"
                 renderOption={(props, option) => {
 
@@ -33,8 +33,8 @@ export default function SelectInput<T>({ label, setSelected, data, removable = t
                 options={data} />
         );
     }
+
     return <Box sx={{ display: 'flex', justifyContent: "center" }}>
         <CircularProgress />
     </Box>
-
 }

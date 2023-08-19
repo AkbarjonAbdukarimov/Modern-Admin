@@ -7,7 +7,11 @@ import axios from 'axios'
 import { useQuery } from 'react-query'
 import { useState } from 'react'
 
-const getSubcategory = (id: string): Promise<ISubcategory> => axios.get(`/subcategories/` + id).then(res => res.data)
+const getSubcategory = (id: string): Promise<ISubcategory> => axios.get(`/subcategories/` + id, {
+    params: {
+        admin: true
+    }
+}).then(res => res.data)
 
 
 const columns: GridColDef<ISubcategory['props']>[] = [
