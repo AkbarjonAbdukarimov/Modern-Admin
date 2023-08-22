@@ -22,12 +22,12 @@ const Admins = () => {
         //         <Link to={`/props/${params.id}`}>Details</Link>
         //     )
         // },
-        // {
-        //     field: 'Edit', headerName: '', width: 150,
-        //     renderCell: (params) => (
-        //         <Link to={`/props/edit/${params.id}`}>Edit</Link>
-        //     )
-        // }
+        {
+            field: 'Edit', headerName: '', width: 150,
+            renderCell: (params) => (
+                <Link to={`/admins/edit/${params.id}`}>Edit</Link>
+            )
+        }
 
 
     ];

@@ -10,7 +10,7 @@ export default function SelectInput<T>({ label, setSelected, data, removable = t
             <Autocomplete
                 disablePortal
                 //isOptionEqualToValue={ }
-                onChange={(e, value) => value && setSelected(value)}
+                onChange={(e, value) =>  setSelected(value)}
                 id="combo-box-demo"
                 renderOption={(props, option) => {
 
