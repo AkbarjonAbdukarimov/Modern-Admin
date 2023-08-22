@@ -18,6 +18,7 @@ import Prop from "../../Subcategory/Form/Prop";
 import IPropValue from "../../../../interfaces/Props/IPropValue";
 import { useNavigate } from "react-router-dom";
 import Errors from "../../../Errors";
+import IProp from "../../../../interfaces/Props/IProp";
 
 interface NewProductProps {}
 export type price = {
@@ -51,8 +52,8 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
     e.preventDefault();
 
     const data = new FormData(e.target);
-    data.append("category", selectedCat.id);
-    data.append("subcategory", selectedSubct.id);
+    data.append("category", selectedCat.id||undefined);
+    data.append("subcategory", selectedSubct.id||undefined);
     selectedProps.map((p) => {
       data.append("props[]", p.id);
     });
@@ -79,8 +80,8 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
         });
     }
   }, [selectedSubct]);
-  const handlePropSelection = (prop: IProp) => {
-    selectProps((prev) => [...prev, prop]);
+  const handlePropSelection = (prop: IProp|null) => {
+    prop&&selectProps((prev) => [...prev, prop]);
   };
   return (
     <>
