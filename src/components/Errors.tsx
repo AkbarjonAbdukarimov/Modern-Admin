@@ -1,8 +1,9 @@
 import { Alert, Snackbar } from '@mui/material'
-import { FunctionComponent } from 'react'
+import { FunctionComponent, useState } from 'react'
 import IError from '../interfaces/IError'
 
 const Errors: FunctionComponent<{ errs: IError[] | undefined }> = ({ errs }) => {
+    const [open,setOpen]=useState<boolean>(true)
     if (!errs) {
         return
     }
@@ -12,6 +13,7 @@ const Errors: FunctionComponent<{ errs: IError[] | undefined }> = ({ errs }) => 
             <Snackbar
                 open={open}
                 autoHideDuration={8000}
+                onClose={()=>setOpen(false)}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
                 <Alert severity="error">{errs.length > 0 ? errs[0].message : 'Server Error'}</Alert>
             </Snackbar>

@@ -6,4 +6,5 @@ export default interface IAdmin {
   password: string;
   vendorId?: IVendor;
   token: string;
+  super:boolean
 }

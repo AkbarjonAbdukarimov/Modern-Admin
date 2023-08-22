@@ -33,6 +33,8 @@ import { EditVendor } from './components/pages/Vendor/EditVendor'
 import Admins from './components/pages/Admins/Admins'
 import NewAdmin from './components/pages/Admins/NewAdmin'
 import EditSubcategory from './components/pages/Subcategory/EditSubcategory'
+import EditAdmin from './components/pages/Admins/EditAdmin'
+import Product from './components/pages/Products/Product'
 
 
 const queryClient = new QueryClient()
@@ -64,9 +66,12 @@ export default function App() {
                   <Route path='/' />
                   <Route path="/products" element={<Products />} />
                   <Route path="/products/new" element={<NewProduct />} />
+                  <Route path="/products/edit/:id" element={<NewProduct />} />
+                  <Route path="/products/:id" element={<Product />} />
 
                   <Route path='/admins' element={<Admins />}></Route>
                   <Route path='/admins/new' element={<NewAdmin />}></Route>
+                  <Route path='/admins/edit/:id' element={<EditAdmin />}></Route>
 
                   <Route path='/props' element={<Props />}></Route>
                   <Route path='/props/new' element={<NewProp />}></Route>
