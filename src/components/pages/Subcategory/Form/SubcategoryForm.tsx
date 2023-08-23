@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import Errors from "../../../Errors";
 import ISubcategory from "../../../../interfaces/ISubcategory";
 import Prop from "./Prop";
-import SelectInput from "../../../SelectInput";
+import SelectInput from "../../../CustomSelectInput";
 import IProp from "../../../../interfaces/Props/IProp";
 import IPropValue from "../../../../interfaces/Props/IPropValue";
 import { useQueries, useQuery } from "react-query";

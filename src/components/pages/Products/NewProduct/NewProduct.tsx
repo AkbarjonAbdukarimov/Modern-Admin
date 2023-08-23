@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { FunctionComponent, SyntheticEvent, useEffect, useState } from "react";
 import Price from "./Price";
-import SelectInput from "../../../SelectInput";
+import SelectInput from "../../../CustomSelectInput";
 import axios from "axios";
 import ICategory from "../../../../interfaces/ICategory";
 import { useQuery } from "react-query";
@@ -23,10 +23,10 @@ import IProp from "../../../../interfaces/Props/IProp";
 interface NewProductProps {}
 export type price = {
   id: number;
-  qtyMin: number;
-  qtyMax: number;
-  price: number;
-  oldPrice?:number
+  qtyMin: number|string;
+  qtyMax: number|string;
+  price: number|string;
+  oldPrice?:number|string
   //component: FunctionComponent
 };
 const getCategories = () =>
@@ -40,8 +40,8 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
       price: 0,
     },
   ]);
-  const [selectedCat, setSelectedCat] = useState<ICategory>();
-  const [selectedSubct, setSelectedSubct] = useState<ISubcategory>();
+  const [selectedCat, setSelectedCat] = useState<ICategory|undefined>();
+  const [selectedSubct, setSelectedSubct] = useState<ISubcategory|undefined>();
   const [props, setProps] = useState<ISubcategory>();
   const [selectedProps, selectProps] = useState<IPropValue[]>([]);
   const [err, setError] = useState<[{ message: string }] | undefined>();
@@ -52,8 +52,8 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
     e.preventDefault();
 
     const data = new FormData(e.target);
-    data.append("category", selectedCat.id||undefined);
-    data.append("subcategory", selectedSubct.id||undefined);
+    selectedCat&&data.append("category", selectedCat.id );
+    selectedSubct&&data.append("subcategory", selectedSubct.id);
     selectedProps.map((p) => {
       data.append("props[]", p.id);
     });
@@ -61,15 +61,15 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
     prices.map((p) => {
       data.append("prices[]", JSON.stringify({qtyMin:p.qtyMin, qtyMax:p.qtyMax, price:p.price, oldPrice:p.oldPrice}) );
     });
-    console.log([...data.entries()]);
+   
     axios
       .post("/products/new", data)
       .then((res) => navigate('/products'))
       .catch((e) => {
         console.log(e)
-        setError([e.response.data]);
+        
+        setError([...e.response.data.errors]);
       });
-    // 
   }
   useEffect(() => {
     if (selectedSubct) {

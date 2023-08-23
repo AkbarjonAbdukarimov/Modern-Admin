@@ -1,6 +1,5 @@
 import { FunctionComponent, useState } from "react";
 import { useQuery } from "react-query";
-import ProductTable from "./ProductTable";
 import { Link } from "react-router-dom";
 import { SpeedDial, SpeedDialIcon } from "@mui/material";
 import Loading from "../../Loading";
@@ -26,7 +25,7 @@ const Products: FunctionComponent = () => {
     axios
       .delete("/products/delete/" + id)
       .then((res) => {
-        // return refetch();
+         return refetch();
       })
       .catch((e) => setErrs(e));
   }
@@ -54,6 +53,13 @@ const Products: FunctionComponent = () => {
       width: 150,
       renderCell: (params) => (
         <Link to={`/products/${params.id}`}>Details</Link>
+      ),
+    },{
+      field: "Edit",
+      headerName: "",
+      width: 150,
+      renderCell: (params) => (
+        <Link to={`/products/edit/${params.id}`}>Edit</Link>
       ),
     },
     {

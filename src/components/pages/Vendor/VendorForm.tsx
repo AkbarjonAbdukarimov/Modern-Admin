@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Errors from "../../Errors";
-import SelectInput from "../../SelectInput";
+import SelectInput from "../../CustomSelectInput";
 
 interface IVendorFormProps {
     formType: "new" | "edit"

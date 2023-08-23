@@ -113,12 +113,12 @@ export default function Product() {
                       />
                     ))}
                 </div>
-                {product.data.video && <div className="my-3">
-                  <Typography paragraph>Video</Typography>
-                 
+                {product.data.video && (
+                  <div className="my-3">
+                    <Typography paragraph>Video</Typography>
+
                     <>
                       <iframe
-                        
                         height="194"
                         src={
                           "https://ik.imagekit.io/z6k3ktb71/" +
@@ -126,8 +126,8 @@ export default function Product() {
                         }
                       ></iframe>
                     </>
-                  
-                </div>}
+                  </div>
+                )}
                 <Typography paragraph>Properties:</Typography>
                 {Object.keys(product.data.props).map((i) => {
                   return (
@@ -147,11 +147,9 @@ export default function Product() {
 
                 <List aria-labelledby="basic-list-demo">
                   {product.data.price.map((p) => (
-                    
-                      <ListItem key={p.price+p.qtyMax+p.qtyMin}>
-                        Amount: {p.qtyMin}-{p.qtyMax} Price {p.price}
-                      </ListItem>
-                    
+                    <ListItem key={p.price + p.qtyMax + p.qtyMin}>
+                      Amount: {p.qtyMin}-{p.qtyMax} Price {p.price}
+                    </ListItem>
                   ))}
                 </List>
               </CardContent>
