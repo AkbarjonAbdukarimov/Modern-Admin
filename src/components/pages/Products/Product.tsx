@@ -1,6 +1,6 @@
 import axios from "axios";
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import IProduct from "../../../interfaces/Product/IProduct";
 import { useQuery } from "react-query";
 import Loading from "../../Loading";
@@ -18,6 +18,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { List, ListItem } from "@mui/material";
+import AdminContext from "../../../context/AdminContext";
 const getProduct = ({ queryKey }): Promise<IProduct> =>
   axios
     .get<IProduct>(`/products/${queryKey[1]}`)
@@ -26,15 +27,17 @@ const getProduct = ({ queryKey }): Promise<IProduct> =>
 export default function Product() {
   const { id } = useParams();
   const product = useQuery<IProduct>(["product", id], getProduct);
-
+  const { admin } = useContext(AdminContext);
   const [expanded, setExpanded] = React.useState(false);
-
+  const navigate = useNavigate();
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
   if (product.isLoading) {
     return <Loading isLoading={product.isLoading} />;
+  }
+  if (product.data && product.data.author._id != admin.id) {
+    navigate("/products");
   }
   return (
     <>
@@ -129,12 +132,12 @@ export default function Product() {
                   </div>
                 )}
                 <Typography paragraph>Properties:</Typography>
-                {Object.keys(product.data.props).map((i) => {
+                {product.data.props.map((i) => {
                   return (
-                    <div key={product.data.props[i].id}>
-                      <Typography>{i.split("_").join(" ")}</Typography>
+                    <div key={i.id}>
+                      <Typography>{i.name}</Typography>
                       <List aria-labelledby="basic-list-demo">
-                        {product.data.props[i].props.map((p) => (
+                        {i.values.map((p) => (
                           <div key={p.id}>
                             <ListItem key={p.id}>{p.value}</ListItem>
                           </div>

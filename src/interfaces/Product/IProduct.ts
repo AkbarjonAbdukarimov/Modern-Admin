@@ -6,6 +6,7 @@ import IReview from "../Review/IReview";
 import IAdmin from "../IAdmin";
 import ICategory from "../ICategory";
 import ISubcategory from "../ISubcategory";
+import IFormatedProps from "../Props/IFormaterProps";
 
 export default interface IProduct {
   id: string;
@@ -17,7 +18,7 @@ export default interface IProduct {
   price: Array<IPrice>;
   media: Array<IProductMedia>;
   video: IProductMedia;
-  props: Array<IProps>;
+  props: Array<IFormatedProps>;
   review: Array<IReview>;
   author:IAdmin;
   likes:[string]

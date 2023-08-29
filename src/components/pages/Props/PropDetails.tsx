@@ -7,8 +7,8 @@ import axios from "axios"
 import IPropValue from "../../../interfaces/Props/IPropValue"
 import IProp from "../../../interfaces/Props/IProp"
 import { SpeedDial, SpeedDialIcon } from "@mui/material"
-interface IPropDetails { prop: IProp, values: IPropValue[] }
-const getProp = (propId: string): Promise<IPropDetails> => axios.get(`/props/${propId}`).then(res => res.data).catch(e => e)
+import IFormatedProps from "../../../interfaces/Props/IFormaterProps"
+const getProp = (propId: string): Promise<IFormatedProps> => axios.get(`/props/${propId}`).then(res => res.data).catch(e => e)
 
 
 
@@ -38,7 +38,7 @@ export default function PropDetails() {
         <>
             <div style={{ height: "100%" }}>
                 <div className="container my-1">
-                    <h1>{data.prop.name} Property Values</h1>
+                    <h1>{data.name} Property Values</h1>
                 </div>
                 <div >
                     <DataGrid

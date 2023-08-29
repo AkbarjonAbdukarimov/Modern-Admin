@@ -16,7 +16,7 @@ interface Product {
     totalCount: number;
   };
 }
-const getProducts = () => axios.get<Product>("/products").then(res=>res.data);
+const getProducts = () => axios.get<Product>("/products/admin").then(res=>res.data);
 const Products: FunctionComponent = () => {
   const { isLoading, data,refetch } = useQuery(["products"], getProducts);
   const [errs, setErrs] = useState<IError[] | undefined>()

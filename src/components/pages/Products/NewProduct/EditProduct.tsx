@@ -10,8 +10,11 @@ import {
   Button,
   FormControl,
   CardMedia,
+  IconButton,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import { useState, useEffect, useContext } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import ISubcategory from "../../../../interfaces/ISubcategory";
@@ -25,6 +28,8 @@ import IPrice from "../../../../interfaces/Product/IPrice";
 import Loading from "../../../Loading";
 import CustomSelectInput from "../../../CustomSelectInput";
 import "./EditProduct.css";
+import AdminContext from "../../../../context/AdminContext";
+import IProductMedia from "../../../../interfaces/Product/IProducMedia";
 export type price = {
   id: number;
   qtyMin: number;
@@ -58,8 +63,11 @@ export default function EditProduct() {
   const [selectedProps, selectProps] = useState<IPropValue[]>([]);
   const [err, setError] = useState<[{ message: string }] | undefined>();
   const [product, setProduct] = useState<IProduct | undefined>();
+  const [delFiles, setDelFiles] = useState<IProductMedia[] | undefined>();
   const categories = useQuery(["categories-product"], getCategories);
   const navigate = useNavigate();
+  const { admin } = useContext(AdminContext);
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -71,7 +79,7 @@ export default function EditProduct() {
     });
     oldProps.map((p) => {
       data.append("props[]", p.id);
-    })
+    });
     data.delete("price");
     prices.map((p) => {
       data.append(
@@ -84,11 +92,11 @@ export default function EditProduct() {
         })
       );
     });
-    console.log(...data.entries())
+    console.log(...data.entries());
     axios
-      .put("/products/edit/"+id, data)
+      .put("/products/edit/" + id, data)
       .then((res) => {
-        navigate("/products/"+res.data.id)
+        navigate("/products/" + res.data.id);
       })
       .catch((e) => {
         console.log(e);
@@ -101,11 +109,19 @@ export default function EditProduct() {
       .get<IProduct>(`/products/${id}`, { params: { admin: true } })
       .then((res) => {
         const { data } = res;
+        if (data && data.author.id != admin.id) {
+          navigate("/products");
+          return;
+        }
         setPrStrings({
           name: data.name,
           description: data.description,
         });
-        setPrices(data.price.map(p=>{return{...p, id:uuid()}}))
+        setPrices(
+          data.price.map((p) => {
+            return { ...p, id: uuid() };
+          })
+        );
         setOldCat(data.category);
         setOldSubct(data.subcategory);
         setOldProps(data.props);
@@ -128,7 +144,7 @@ export default function EditProduct() {
   if (!product) {
     return <Loading isLoading={true} />;
   }
-  
+
   return (
     <>
       <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
@@ -196,29 +212,56 @@ export default function EditProduct() {
               </div>
               <div className="mb-3 d-flex justify-content-center w-100">
                 {product.video && (
-                  <video width="100%" height="300px" className="my-2" controls>
-                    <source
-                      src={
-                        "https://ik.imagekit.io/z6k3ktb71/" +
-                        product.video.name
-                      }
-                      type="video/mp4"
-                    />
-                  </video>
+                  <>
+                    <video
+                      width="100%"
+                      height="300px"
+                      className="my-2"
+                      controls
+                    >
+                      <source
+                        src={
+                          "https://ik.imagekit.io/z6k3ktb71/" +
+                          product.video.name
+                        }
+                        type="video/mp4"
+                      />
+                    </video>
+                    <IconButton sx={{ m: 1.2 }}>
+                      <RemoveIcon />
+                    </IconButton>
+                  </>
                 )}
               </div>
               <div className="mb-3">
                 <div className="d-flex flex-column flex-md-row align-items-center justify-content-evenly">
                   {product.media.length > 0 &&
                     product.media.map((m) => (
-                      <CardMedia
-                        key={m.fileId}
-                        component="img"
-                        style={{ maxWidth: "200px" }}
-                        height="194"
-                        image={"https://ik.imagekit.io/z6k3ktb71/" + m.name}
-                        alt={product.name}
-                      />
+                      <div key={m.fileId} className="d-flex flex-column align-items-center">
+                        <CardMedia
+                         
+                          component="img"
+                          style={{ maxWidth: "200px" }}
+                          height="194"
+                          image={"https://ik.imagekit.io/z6k3ktb71/" + m.name}
+                          alt={product.name}
+                        />
+                        <div>
+                          <IconButton
+                            onClick={() => {
+                              if (delFiles) {
+                                setDelFiles([...delFiles, m]);
+                              return
+                              }
+                              setDelFiles([m])
+
+
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </div>
+                      </div>
                     ))}
                 </div>
               </div>
@@ -332,7 +375,12 @@ export default function EditProduct() {
 
               <div className="mb-3">
                 {prices.map((p) => (
-                  <Price key={p.id} setPrice={setPrices} price={p} prs={prices} />
+                  <Price
+                    key={p.id}
+                    setPrice={setPrices}
+                    price={p}
+                    prs={prices}
+                  />
                 ))}
               </div>
 
