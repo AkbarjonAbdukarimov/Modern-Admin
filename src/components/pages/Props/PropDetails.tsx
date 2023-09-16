@@ -4,11 +4,9 @@ import Loading from "../../Loading"
 import { GridBaseColDef } from "@mui/x-data-grid/internals"
 import { DataGrid } from "@mui/x-data-grid"
 import axios from "axios"
-import IPropValue from "../../../interfaces/Props/IPropValue"
-import IProp from "../../../interfaces/Props/IProp"
 import { SpeedDial, SpeedDialIcon } from "@mui/material"
 import IFormatedProps from "../../../interfaces/Props/IFormaterProps"
-const getProp = (propId: string): Promise<IFormatedProps> => axios.get(`/props/${propId}`).then(res => res.data).catch(e => e)
+const getProp = (propId: string): Promise<IFormatedProps> => axios.get(`/props/prop/${propId}`).then(res => res.data).catch(e => e)
 
 
 
@@ -22,6 +20,7 @@ export default function PropDetails() {
         return <Loading isLoading={isLoading} />
     }
     if (!data) return <></>
+   
     const columns: GridBaseColDef[] = [
         { field: 'id', headerName: 'ID', width: 250 },
 
