@@ -16,12 +16,13 @@ const PropForm: React.FC<IPropForm> = ({ requestPath, formType, propId }) => {
     const navigate = useNavigate()
     useEffect(() => {
         if (propId) {
-            axios.get('/props/' + propId).then(res => { setName(res.data.prop.name); setLabel(res.data.prop.label) })
+            axios.get('/props/' + propId).then(res => { 
+                setName(res.data.name); setLabel(res.data.label) })
                 .catch(e => setError(prev => {
                     if (!prev) {
-                        return [error]
+                        return [e]
                     }
-                    return [...prev, error]
+                    return [...prev, e]
                 }))
         }
     }, [])

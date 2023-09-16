@@ -42,7 +42,7 @@ export default function PropDetails() {
                 </div>
                 <div >
                     <DataGrid
-                        rows={data.values}
+                        rows={data.values||[]}
                         columns={columns}
                         checkboxSelection
                         autoHeight={true}
