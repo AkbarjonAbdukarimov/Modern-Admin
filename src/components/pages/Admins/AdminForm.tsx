@@ -20,7 +20,7 @@ import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import IVendor from "../../../interfaces/Vendor/IVendor";
 import { useQuery } from "react-query";
-import SelectInput from "../../SelectInput";
+import SelectInput from "../../CustomSelectInput";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import IAdmin from "../../../interfaces/IAdmin";
 import Loading from "../../Loading";

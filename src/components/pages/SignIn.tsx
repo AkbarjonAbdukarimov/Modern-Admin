@@ -16,6 +16,7 @@ import axios, { AxiosError } from 'axios';
 import AdminContext from '../../context/AdminContext';
 import Errors from '../Errors';
 import IError from '../../interfaces/IError';
+import { useNavigate } from 'react-router-dom';
 
 const defaultTheme = createTheme();
 
@@ -23,6 +24,7 @@ export default function SignIn() {
     const { setAdmin } = useContext(AdminContext)
     const [err, setError] = useState<IError[] | undefined>()
     const [open, setOpen] = useState(false);
+  
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -36,6 +38,7 @@ export default function SignIn() {
             setAdmin(res.data)
             // localStorage.setItem('admin', )
             localStorage.setItem("admin", JSON.stringify(res.data))
+            
         } catch (error) {
             if (error instanceof AxiosError) {
 

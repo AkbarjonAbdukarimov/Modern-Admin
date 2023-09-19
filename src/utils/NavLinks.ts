@@ -1,9 +1,11 @@
-const navLinks: Array<NavLink> = [
-  { name: "Products", to: "/products" },
-  { name: "Admins", to: "/admins" },
-  { name: "Categories", to: "/categories" },
-  { name: "Vendors", to: "/vendors" },
-  { name: "Properties", to: "/props" },
+import INavProps from "../interfaces/INavProps";
+
+const navLinks: Array<INavProps> = [
+  { name: "Products", to: "/products", super: false },
+  { name: "Orders", to: "/orders", super: false },
+  { name: "Admins", to: "/admins", super: true },
+  { name: "Categories", to: "/categories", super: true },
+  { name: "Vendors", to: "/vendors", super: true },
+  { name: "Properties", to: "/props", super: true },
 ];
-export type NavLink = { name: string; to: string };
 export default navLinks;

@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Box, CircularProgress, Tooltip, Typography } from '@mui/material';
 
-export default function SelectInput<T>({ label, setSelected, data, removable = true, }:
+export default function CustomSelectInput<T>({ label, setSelected, data, removable = true, }:
     { label: string, data: T[] | [], setSelected: (e: T | null) => void, removable?: boolean, }) {
 
     if (data) {

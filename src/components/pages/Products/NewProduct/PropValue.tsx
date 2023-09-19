@@ -1,3 +1,6 @@
+import { IconButton } from "@mui/material";
+import { IValueProps } from "../../Props/Values/Value";
+
 export default function PropValue({ setValues, value }: IValueProps) {
     function add() {
         setValues(prev => {

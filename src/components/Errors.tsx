@@ -1,8 +1,11 @@
 import { Alert, Snackbar } from '@mui/material'
-import { FunctionComponent, useState } from 'react'
+import { FunctionComponent, useEffect, useState } from 'react'
 import IError from '../interfaces/IError'
 
 const Errors: FunctionComponent<{ errs: IError[] | undefined }> = ({ errs }) => {
+    useEffect(()=>{
+        setOpen(true)
+    },[errs])
     const [open,setOpen]=useState<boolean>(true)
     if (!errs) {
         return

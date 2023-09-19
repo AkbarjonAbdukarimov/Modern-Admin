@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import Errors from "../../../Errors";
 import ISubcategory from "../../../../interfaces/ISubcategory";
 import Prop from "./Prop";
-import SelectInput from "../../../SelectInput";
+import SelectInput from "../../../CustomSelectInput";
 import IProp from "../../../../interfaces/Props/IProp";
 import IPropValue from "../../../../interfaces/Props/IPropValue";
 import { useQueries, useQuery } from "react-query";
@@ -47,9 +47,10 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
   const [newProps, setNewProps] = useState<IPropValue[] | undefined>([]);
   const navigate = useNavigate();
 
-  const handlePropSelection = (prop: IPropValue | null) => {
-    setNewProps((prev) => [...prev, prop]);
+  const handlePropSelection = (prop: IProp|null) => {
+    prop&&setNewProps((prev) => [...prev, prop]);
   };
+  
 
   useEffect(() => {
     if (id) {
@@ -79,7 +80,7 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
         data,
         method: formType === "edit" ? "put" : "post",
       });
-       navigate("/categories/"+categoryId);
+       navigate("/categories/");
     } catch (error) {
       if (error instanceof AxiosError) {
         const { errors } = error.response.data;

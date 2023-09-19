@@ -5,4 +5,6 @@ export default interface IOrder {
   products: Array<IOrderProducts>;
   userId: string;
   deliveryAddress: string;
+  total:number
+  createdAt:Date
 }
