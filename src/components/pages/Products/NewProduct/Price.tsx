@@ -1,17 +1,17 @@
 import { FormControl, IconButton, Input, InputLabel } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Dispatch, FunctionComponent, useState } from "react";
+import { Dispatch, useState } from "react";
 import { price } from "./NewProduct";
-import { v4 as uuid } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
 interface IPriceProps {
   setPrice: Dispatch<React.SetStateAction<price[]>>;
   price: price;
-  prices:price[];
+  prices: price[];
 }
-export default function Price({ setPrice, price,prices }: IPriceProps) {
+export default function Price({ setPrice, price, prices }: IPriceProps) {
   const [qtyMin, setMin] = useState(price.qtyMin);
   const [qtyMax, setMax] = useState(price.qtyMax);
   const [pr, setPr] = useState(price.price);
@@ -19,8 +19,7 @@ export default function Price({ setPrice, price,prices }: IPriceProps) {
   const [isEditing, setEditing] = useState(true);
   function handleEdit() {
     setEditing(!isEditing);
-    const updPr=prices.map((p) => {
-      
+    const updPr = prices.map((p) => {
       if (p.id === price.id) {
         return {
           ...p,
@@ -31,16 +30,16 @@ export default function Price({ setPrice, price,prices }: IPriceProps) {
         };
       }
       return p;
-    })
-   setPrice(updPr)
-   console.log(updPr)
+    });
+    setPrice(updPr);
+    console.log(updPr);
   }
   function addPrice() {
     setPrice((prev) => {
       return [
         ...prev,
         {
-          id: uuid(),
+          id: uuidv4(),
           qtyMin: "",
           qtyMax: "",
           price: "",
