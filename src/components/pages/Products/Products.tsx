@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { SpeedDial, SpeedDialIcon } from "@mui/material";
@@ -8,6 +8,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import IProduct from "../../../interfaces/Product/IProduct";
 import IError from "../../../interfaces/IError";
 import Errors from "../../Errors";
+import AdminContext from "../../../context/AdminContext";
 
 interface Product {
   data: {
@@ -16,18 +17,22 @@ interface Product {
     totalCount: number;
   };
 }
-const getProducts = () => axios.get<Product>("/products/admin").then(res=>res.data);
+const getProducts = () =>
+  axios.get<Product>("/products/admin").then((res) => res.data);
 const Products: FunctionComponent = () => {
-  const { isLoading, data,refetch } = useQuery(["products"], getProducts);
-  const [errs, setErrs] = useState<IError[] | undefined>()
-  
+  const { isLoading, data, refetch, isError, error } = useQuery(
+    ["products"],
+    getProducts
+  );
+  const [errs, setErrs] = useState<IError[] | undefined>();
+  const { setAdmin } = useContext(AdminContext);
   function handleDelete(id: string) {
     axios
       .delete("/products/delete/" + id)
       .then((res) => {
-         return refetch();
+        return refetch();
       })
-      .catch((e) => setErrs(e));
+      .catch((e) => setErrs([...e.response.data.errors]));
   }
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
@@ -54,7 +59,8 @@ const Products: FunctionComponent = () => {
       renderCell: (params) => (
         <Link to={`/products/${params.id}`}>Details</Link>
       ),
-    },{
+    },
+    {
       field: "Edit",
       headerName: "",
       width: 150,
@@ -78,7 +84,18 @@ const Products: FunctionComponent = () => {
       ),
     },
   ];
-  if (isLoading ||!data) {
+  if (isError) {
+    console.log(error);
+    // if (error.response) {
+    //   if (error.response.data.status === 403) {
+    //     localStorage.clear();
+    //     setAdmin(undefined);
+    //   }
+    // }
+    //setErrs([...error.response.data.errors]);
+    return <Errors errs={errs} />;
+  }
+  if (isLoading || !data) {
     return <Loading isLoading={isLoading} />;
   }
   return (
@@ -107,5 +124,3 @@ const Products: FunctionComponent = () => {
 };
 
 export default Products;
-
-

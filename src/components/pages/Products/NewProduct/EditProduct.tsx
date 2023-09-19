@@ -92,14 +92,12 @@ export default function EditProduct() {
         })
       );
     });
-    console.log(...data.entries());
     axios
       .put("/products/edit/" + id, data)
       .then((res) => {
         navigate("/products/" + res.data.id);
       })
       .catch((e) => {
-        console.log(e);
 
         setError([...e.response.data.errors]);
       });
@@ -109,10 +107,10 @@ export default function EditProduct() {
       .get<IProduct>(`/products/${id}`, { params: { admin: true } })
       .then((res) => {
         const { data } = res;
-        if (data && data.author.id != admin.id) {
-          navigate("/products");
-          return;
-        }
+        // if (data && !admin.super ||data.author.id != admin.id) {
+        //   navigate("/products");
+        //   return;
+        // }
         setPrStrings({
           name: data.name,
           description: data.description,
@@ -379,7 +377,7 @@ export default function EditProduct() {
                     key={p.id}
                     setPrice={setPrices}
                     price={p}
-                    prs={prices}
+                    prices={prices}
                   />
                 ))}
               </div>

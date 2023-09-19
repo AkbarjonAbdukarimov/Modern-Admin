@@ -8,7 +8,7 @@ import Loading from "../../Loading"
 import { SpeedDial, SpeedDialIcon } from "@mui/material"
 import { GridColDef, DataGrid } from "@mui/x-data-grid"
 import Errors from "../../Errors"
-const getVendor = (id: string): Promise<IVendor> => axios.get(`/vendors/${id}`).then((response) => response.data)
+const getVendor = (id: string): Promise<IVendor> => axios.get<IVendor>(`/vendors/${id}`).then((response) => response.data)
 
 export const Vendor = () => {
   const [errs, setErrs] = useState<IError[] | undefined>()
@@ -17,6 +17,7 @@ export const Vendor = () => {
   if (isLoading) {
     return <Loading isLoading={isLoading} />
   }
+  console.log(data)
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 250 },
@@ -24,13 +25,13 @@ export const Vendor = () => {
     {
       field: 'Details', headerName: '', width: 150,
       renderCell: (params) => (
-        <Link to={`/vendors/${params.id}`}>Details</Link>
+        <Link to={`/products/${params.id}`}>Details</Link>
       )
     },
     {
       field: 'Edit', headerName: '', width: 150,
       renderCell: (params) => (
-        <Link to={`/vendors/edit/${params.id}`}>Edit</Link>
+        <Link to={`/products/edit/${params.id}`}>Edit</Link>
       )
     },
     {
@@ -48,15 +49,15 @@ export const Vendor = () => {
   ];
 
   function handleDelete(id: string) {
-    axios.delete('/vendors/' + id).then(res => {
+    axios.delete('/products/delete/' + id).then(res => {
       return refetch()
-    }).catch(e => setErrs([e]))
+    }).catch(e => setErrs([...e.response.date.errors]))
   }
   if (data) {
     return (
       <div className='row justify-content-center mt-3 w-100'>
         <DataGrid
-          rows={data.products}
+          rows={data.products||[]}
           columns={columns}
           autoHeight={true}
         />

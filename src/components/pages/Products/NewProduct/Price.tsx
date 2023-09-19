@@ -9,8 +9,9 @@ import EditIcon from "@mui/icons-material/Edit";
 interface IPriceProps {
   setPrice: Dispatch<React.SetStateAction<price[]>>;
   price: price;
+  prices:price[];
 }
-export default function Price({ setPrice, price,prs }: IPriceProps) {
+export default function Price({ setPrice, price,prices }: IPriceProps) {
   const [qtyMin, setMin] = useState(price.qtyMin);
   const [qtyMax, setMax] = useState(price.qtyMax);
   const [pr, setPr] = useState(price.price);
@@ -18,7 +19,8 @@ export default function Price({ setPrice, price,prs }: IPriceProps) {
   const [isEditing, setEditing] = useState(true);
   function handleEdit() {
     setEditing(!isEditing);
-    const updPr=prs.map((p) => {
+    const updPr=prices.map((p) => {
+      
       if (p.id === price.id) {
         return {
           ...p,
@@ -30,9 +32,8 @@ export default function Price({ setPrice, price,prs }: IPriceProps) {
       }
       return p;
     })
-    console.log(updPr)
    setPrice(updPr)
-    
+   console.log(updPr)
   }
   function addPrice() {
     setPrice((prev) => {

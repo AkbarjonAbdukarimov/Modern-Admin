@@ -33,6 +33,8 @@ import EditSubcategory from "./components/pages/Subcategory/EditSubcategory";
 import EditAdmin from "./components/pages/Admins/EditAdmin";
 import Product from "./components/pages/Products/Product";
 import EditProduct from "./components/pages/Products/NewProduct/EditProduct";
+import Orders from "./components/pages/Orders/Orders";
+import AppBar2 from "./components/AppBar/AppBar";
 
 const queryClient = new QueryClient();
 export default function App() {
@@ -58,14 +60,16 @@ export default function App() {
           ) : (
             <>
               <BrowserRouter>
-                <MainAppBar setUser={setAdmin} navlinks={navLinks} />
+              <AppBar2 navLinks={navLinks} setUser={setAdmin}/>
+                {/* <MainAppBar setUser={setAdmin} navlinks={navLinks} /> */}
                 <Routes>
                   <Route path="/" />
                   <Route path="/products" element={<Products />} />
                   <Route path="/products/new" element={<NewProduct />} />
                   <Route path="/products/edit/:id" element={<EditProduct />} />
                   <Route path="/products/:id" element={<Product />} />
-
+                  
+                  <Route path="/orders" element={<Orders />} />
                   {admin.super ? 
                     <>
                       <Route path="/admins" element={<Admins />}></Route>

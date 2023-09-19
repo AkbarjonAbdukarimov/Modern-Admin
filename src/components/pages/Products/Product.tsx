@@ -36,9 +36,9 @@ export default function Product() {
   if (product.isLoading) {
     return <Loading isLoading={product.isLoading} />;
   }
-  if (product.data && product.data.author._id != admin.id) {
-    navigate("/products");
-  }
+  // if (product.data && product.data.author._id != admin.id) {
+  //   navigate("/products");
+  // }
   return (
     <>
       {product.data && (

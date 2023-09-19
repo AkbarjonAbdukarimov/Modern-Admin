@@ -23,10 +23,10 @@ import IProp from "../../../../interfaces/Props/IProp";
 interface NewProductProps {}
 export type price = {
   id: number;
-  qtyMin: number|string;
-  qtyMax: number|string;
-  price: number|string;
-  oldPrice?:number|string
+  qtyMin: number | string;
+  qtyMax: number | string;
+  price: number | string;
+  oldPrice?: number | string;
   //component: FunctionComponent
 };
 const getCategories = () =>
@@ -40,8 +40,10 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
       price: 0,
     },
   ]);
-  const [selectedCat, setSelectedCat] = useState<ICategory|undefined>();
-  const [selectedSubct, setSelectedSubct] = useState<ISubcategory|undefined>();
+  const [selectedCat, setSelectedCat] = useState<ICategory | undefined>();
+  const [selectedSubct, setSelectedSubct] = useState<
+    ISubcategory | undefined
+  >();
   const [props, setProps] = useState<ISubcategory>();
   const [selectedProps, selectProps] = useState<IPropValue[]>([]);
   const [err, setError] = useState<[{ message: string }] | undefined>();
@@ -52,22 +54,31 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
     e.preventDefault();
 
     const data = new FormData(e.target);
-    selectedCat&&data.append("category", selectedCat.id );
-    selectedSubct&&data.append("subcategory", selectedSubct.id);
+    selectedCat && data.append("category", selectedCat.id);
+    selectedSubct && data.append("subcategory", selectedSubct.id);
     selectedProps.map((p) => {
       data.append("props[]", p.id);
     });
-    data.delete('price')
+    data.delete("price");
     prices.map((p) => {
-      data.append("prices[]", JSON.stringify({qtyMin:p.qtyMin, qtyMax:p.qtyMax, price:p.price, oldPrice:p.oldPrice}) );
+      data.append(
+        "prices[]",
+        JSON.stringify({
+          qtyMin: p.qtyMin,
+          qtyMax: p.qtyMax,
+          price: p.price,
+          oldPrice: p.oldPrice,
+        })
+      );
     });
-   
     axios
       .post("/products/new", data)
-      .then((res) => navigate('/products'))
+      .then((res) => {
+        navigate("/products");
+      })
       .catch((e) => {
-        console.log(e)
-        
+        console.log(e);
+
         setError([...e.response.data.errors]);
       });
   }
@@ -80,8 +91,8 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
         });
     }
   }, [selectedSubct]);
-  const handlePropSelection = (prop: IProp|null) => {
-    prop&&selectProps((prev) => [...prev, prop]);
+  const handlePropSelection = (prop: IProp | null) => {
+    prop && selectProps((prev) => [...prev, prop]);
   };
   return (
     <>
@@ -174,7 +185,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
               </div>
               <div className="mb-3">
                 {prices.map((p) => (
-                  <Price key={p.id} setPrice={setPrices} price={p} />
+                  <Price key={p.id} prices={prices} setPrice={setPrices} price={p} />
                 ))}
               </div>
 

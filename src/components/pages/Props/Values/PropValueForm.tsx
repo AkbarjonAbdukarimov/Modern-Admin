@@ -34,7 +34,6 @@ const PropValueForm: React.FC<IValueForm> = ({
     axios
       .get("/props/" + propId)
       .then((res) => {
-        console.log(res.data);
         setProp(res.data);
       })
       .catch((error) =>
