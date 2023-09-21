@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction, createContext } from "react";
+import { createContext } from "react";
 import IAdmin from "../interfaces/IAdmin";
 
 interface IAdminContex {
   admin: IAdmin | undefined;
-  setAdmin: () => Dispatch<SetStateAction<IAdmin | undefined>>;
+  setAdmin: Function;
 }
-const AdminContext = createContext<IAdminContex | undefined>({});
+const AdminContext = createContext<IAdminContex | object>({});
 export default AdminContext;

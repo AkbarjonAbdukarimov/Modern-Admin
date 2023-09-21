@@ -1,4 +1,3 @@
-import MainAppBar from "./components/AppBar/MainAppBar";
 import "./App.css";
 import SignIn from "./components/pages/SignIn";
 import { useEffect, useState } from "react";
@@ -34,19 +33,19 @@ import EditAdmin from "./components/pages/Admins/EditAdmin";
 import Product from "./components/pages/Products/Product";
 import EditProduct from "./components/pages/Products/NewProduct/EditProduct";
 import Orders from "./components/pages/Orders/Orders";
-import AppBar2 from "./components/AppBar/AppBar";
-
+import CustomAppBar from "./components/AppBar/AppBar";
+import { backend } from "./URLS";
 const queryClient = new QueryClient();
 export default function App() {
   const [admin, setAdmin] = useState<IAdmin | undefined>();
 
-  axios.defaults.baseURL = "http://127.0.0.1:3000";
+  axios.defaults.baseURL = backend+"api";
 
   axios.defaults.headers.common["Authorization"] = admin?.token;
 
   useEffect(() => {
     const a = localStorage.getItem("admin");
-    if (a !== "undefined") {
+    if (a !== "undefined"&&a) {
       setAdmin(JSON.parse(a));
     }
   }, []);
@@ -60,8 +59,8 @@ export default function App() {
           ) : (
             <>
               <BrowserRouter>
-              <AppBar2 navLinks={navLinks} setUser={setAdmin}/>
-                {/* <MainAppBar setUser={setAdmin} navlinks={navLinks} /> */}
+              <CustomAppBar navLinks={navLinks} setUser={setAdmin}/>
+                
                 <Routes>
                   <Route path="/" />
                   <Route path="/products" element={<Products />} />
@@ -70,6 +69,7 @@ export default function App() {
                   <Route path="/products/:id" element={<Product />} />
                   
                   <Route path="/orders" element={<Orders />} />
+                  {/* <Route path="/chats" element={<Chats navLinks={navLinks} setUser={setAdmin} />} /> */}
                   {admin.super ? 
                     <>
                       <Route path="/admins" element={<Admins />}></Route>

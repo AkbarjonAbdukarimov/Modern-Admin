@@ -1,5 +1,5 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
+import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,12 +13,12 @@ import { AccountCircle } from "@mui/icons-material";
 import { Menu, MenuItem, Badge } from "@mui/material";
 import axios from "axios";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import ChatListDrawer from "../pages/Chats/ChatList";
-import MainDrawer from "../Drawer/Drawer";
-import INavProps from "../../interfaces/INavProps";
-import { useEffect } from "react";
+import MainDrawer from "../../Drawer/Drawer";
+import INavProps from "../../../interfaces/INavProps";
+import ChatListDrawer from "./ChatList";
 
 const drawerWidth = 240;
+
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -41,31 +41,25 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export default function CustomAppBar({
+
+export default function Chats({
   navLinks,
   setUser,
 }: {
   navLinks: INavProps[];
   setUser: Function;
 }) {
+  const [open, setOpen] = React.useState(false);
   const { pathname } = useLocation();
-  
-  const [open, setOpen] = React.useState(pathname!="/chats"?false:true);
   const navigate = useNavigate();
   const [unreadMsgs, setCount] = React.useState(0);
-useEffect(() => {
+  React.useEffect(() => {
     axios
       .get("/chats/admin/msgcount")
       .then((res) => setCount(res.data.unreadMsgs))
       .catch((e) => console.log(e));
   }, []);
-useEffect(()=>{
-  if(pathname==='/chats'){
-    setOpen(true)
-  }else{
-    setOpen(false)
-  }
-},[pathname])
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -143,30 +137,29 @@ useEffect(()=>{
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {pathname != "/chats" && (
-        <MenuItem>
-          <Link
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-              display: "flex",
-              alignItems: "center",
-            }}
-            to={"/chats"}
+      {pathname != "/chats"&&<MenuItem>
+        <Link
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            display: "flex",
+            alignItems: "center",
+          }}
+          to={"/chats"}
+        >
+          <IconButton
+            size="large"
+            aria-label={`${unreadMsgs} new messages`}
+            color="inherit"
           >
-            <IconButton
-              size="large"
-              aria-label={`${unreadMsgs} new messages`}
-              color="inherit"
-            >
-              <Badge badgeContent={unreadMsgs} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <p className="m-0">Messages</p>
-          </Link>
-        </MenuItem>
-      )}
+            <Badge badgeContent={unreadMsgs} color="error">
+              <MailIcon />
+            </Badge>
+          </IconButton>
+          <p className="m-0">Messages</p>
+        </Link>
+      </MenuItem>}
+      
 
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -183,6 +176,8 @@ useEffect(()=>{
     </Menu>
   );
 
+ 
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -191,7 +186,7 @@ useEffect(()=>{
           <MainDrawer navlinks={navLinks} />
 
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-           Modern Shop
+            Persistent drawer
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
@@ -255,13 +250,8 @@ useEffect(()=>{
           </Box>
         </Toolbar>
       </AppBar>
-
-      {pathname === "/chats" && (
-        <ChatListDrawer
-          open={open}
-          handleDrawerClose={handleDrawerClose}
-        />
-      )}
+     
+      {pathname==='/chats'&&<ChatListDrawer open={open} handleDrawerClose={handleDrawerClose} handleDrawerOpen={handleDrawerOpen}/>}
       {renderMobileMenu}
       {renderMenu}
     </Box>
