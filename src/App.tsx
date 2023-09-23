@@ -35,6 +35,7 @@ import EditProduct from "./components/pages/Products/NewProduct/EditProduct";
 import Orders from "./components/pages/Orders/Orders";
 import CustomAppBar from "./components/AppBar/AppBar";
 import { backend } from "./URLS";
+import { socket } from "./socket";
 const queryClient = new QueryClient();
 export default function App() {
   const [admin, setAdmin] = useState<IAdmin | undefined>();
@@ -47,6 +48,8 @@ export default function App() {
     const a = localStorage.getItem("admin");
     if (a !== "undefined"&&a) {
       setAdmin(JSON.parse(a));
+      socket.connect()
+      socket.emit('newUser', a)
     }
   }, []);
 
