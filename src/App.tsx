@@ -36,20 +36,23 @@ import Orders from "./components/pages/Orders/Orders";
 import CustomAppBar from "./components/AppBar/AppBar";
 import { backend } from "./URLS";
 import { socket } from "./socket";
+import Chat from "./components/pages/Chats/Chat";
+import MessagingArea from "./components/pages/Chats/Message/MessagingArea";
+import IChat from "./interfaces/IChat";
 const queryClient = new QueryClient();
 export default function App() {
   const [admin, setAdmin] = useState<IAdmin | undefined>();
-
-  axios.defaults.baseURL = backend+"api";
+  const [selectedChat, setSelectedChat] = useState<IChat>();
+  axios.defaults.baseURL = backend + "api";
 
   axios.defaults.headers.common["Authorization"] = admin?.token;
 
   useEffect(() => {
     const a = localStorage.getItem("admin");
-    if (a !== "undefined"&&a) {
+    if (a !== "undefined" && a) {
       setAdmin(JSON.parse(a));
-      socket.connect()
-      socket.emit('newUser', a)
+      socket.connect();
+      socket.emit("newUser", a);
     }
   }, []);
 
@@ -62,18 +65,26 @@ export default function App() {
           ) : (
             <>
               <BrowserRouter>
-              <CustomAppBar navLinks={navLinks} setUser={setAdmin}/>
-                
+                <CustomAppBar navLinks={navLinks} setUser={setAdmin} selectedChat={selectedChat} setSelectedChat={setSelectedChat} />
+
                 <Routes>
                   <Route path="/" />
                   <Route path="/products" element={<Products />} />
                   <Route path="/products/new" element={<NewProduct />} />
                   <Route path="/products/edit/:id" element={<EditProduct />} />
                   <Route path="/products/:id" element={<Product />} />
-                  
+
                   <Route path="/orders" element={<Orders />} />
-                  {/* <Route path="/chats" element={<Chats navLinks={navLinks} setUser={setAdmin} />} /> */}
-                  {admin.super ? 
+                  <Route path="/chats" element={<Chat />} />
+                  {selectedChat && (
+                    <Route
+                      path="/chats/:chatId"
+                      element={
+                        <MessagingArea chat={selectedChat} user={admin} />
+                      }
+                    />
+                  )}
+                  {admin.super ? (
                     <>
                       <Route path="/admins" element={<Admins />}></Route>
                       <Route path="/admins/new" element={<NewAdmin />}></Route>
@@ -115,7 +126,7 @@ export default function App() {
                         path="/categories/:catId/subcategory/:subCtId"
                         element={<Subcategory />}
                       />
-                      \
+
                       <Route path="/vendors" element={<Vendors />} />
                       <Route path="/vendors/:id" element={<Vendor />} />
                       <Route path="/vendors/new" element={<NewVendor />} />
@@ -124,7 +135,9 @@ export default function App() {
                         element={<EditVendor />}
                       />
                     </>
-                  :<></>}
+                  ) : (
+                    <></>
+                  )}
                 </Routes>
               </BrowserRouter>
             </>

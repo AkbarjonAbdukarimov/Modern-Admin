@@ -17,8 +17,9 @@ import ChatListDrawer from "../pages/Chats/ChatList";
 import MainDrawer from "../Drawer/Drawer";
 import INavProps from "../../interfaces/INavProps";
 import { useEffect } from "react";
+import IChat from "../../interfaces/IChat";
 
-const drawerWidth = 240;
+const drawerWidth = 100;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -44,28 +45,33 @@ const AppBar = styled(MuiAppBar, {
 export default function CustomAppBar({
   navLinks,
   setUser,
+  selectedChat,
+  setSelectedChat,
 }: {
   navLinks: INavProps[];
   setUser: Function;
+  selectedChat: IChat;
+  setSelectedChat: Function;
 }) {
   const { pathname } = useLocation();
-  
-  const [open, setOpen] = React.useState(pathname!="/chats"?false:true);
+
+  const chatPath = pathname.split("/")[1] || undefined;
+  const [open, setOpen] = React.useState(chatPath != "/chats" ? false : true);
   const navigate = useNavigate();
   const [unreadMsgs, setCount] = React.useState(0);
-useEffect(() => {
+  useEffect(() => {
     axios
       .get("/chats/admin/msgcount")
       .then((res) => setCount(res.data.unreadMsgs))
       .catch((e) => console.log(e));
   }, []);
-useEffect(()=>{
-  if(pathname==='/chats'){
-    setOpen(true)
-  }else{
-    setOpen(false)
-  }
-},[pathname])
+  useEffect(() => {
+    if (chatPath === "chats") {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [chatPath]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -129,6 +135,7 @@ useEffect(()=>{
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
+      
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
         vertical: "top",
@@ -143,43 +150,45 @@ useEffect(()=>{
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {pathname != "/chats" && (
-        <MenuItem>
-          <Link
-            style={{
-              textDecoration: "none",
-              color: "inherit",
-              display: "flex",
-              alignItems: "center",
-            }}
-            to={"/chats"}
-          >
-            <IconButton
-              size="large"
-              aria-label={`${unreadMsgs} new messages`}
-              color="inherit"
+      <div>
+        {chatPath != "chats" && (
+          <MenuItem>
+            <Link
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                display: "flex",
+                alignItems: "center",
+              }}
+              to={"/chats"}
             >
-              <Badge badgeContent={unreadMsgs} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <p className="m-0">Messages</p>
-          </Link>
-        </MenuItem>
-      )}
+              <IconButton
+                size="large"
+                aria-label={`${unreadMsgs} new messages`}
+                color="inherit"
+              >
+                <Badge badgeContent={unreadMsgs} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <p className="m-0">Messages</p>
+            </Link>
+          </MenuItem>
+        )}
 
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p className="m-0">Profile</p>
-      </MenuItem>
+        <MenuItem onClick={handleProfileMenuOpen}>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <p className="m-0">Profile</p>
+        </MenuItem>
+      </div>
     </Menu>
   );
 
@@ -191,11 +200,11 @@ useEffect(()=>{
           <MainDrawer navlinks={navLinks} />
 
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-           Modern Shop
+            Modern Shop
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {pathname != "/chats" && (
+            {chatPath != "chats" && (
               <Link
                 style={{ textDecoration: "none", color: "white" }}
                 to={"/chats"}
@@ -225,7 +234,7 @@ useEffect(()=>{
             </IconButton>
           </Box>
 
-          {pathname === "/chats" && (
+          {chatPath === "chats" && (
             <Box>
               <IconButton
                 size="large"
@@ -256,10 +265,12 @@ useEffect(()=>{
         </Toolbar>
       </AppBar>
 
-      {pathname === "/chats" && (
+      {chatPath === "chats" && (
         <ChatListDrawer
           open={open}
           handleDrawerClose={handleDrawerClose}
+          selectedChat={selectedChat}
+          setSelectedChat={setSelectedChat}
         />
       )}
       {renderMobileMenu}

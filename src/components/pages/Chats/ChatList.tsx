@@ -5,6 +5,7 @@ import {
   IconButton,
   List,
   Typography,
+  colors,
   styled,
   useTheme,
 } from "@mui/material";
@@ -15,6 +16,8 @@ import axios from "axios";
 import IChat from "../../../interfaces/IChat";
 import { useQuery } from "react-query";
 import ChatItems from "./ChatItem/ChatItem";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 const drawerWidth = 300;
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -27,8 +30,18 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 const getChats = () =>
   axios.get<IChat[]>("/chats/admin").then((res) => res.data);
-const ChatListDrawer = ({ open, handleDrawerClose }:{ open:boolean, handleDrawerClose:Function}) => {
+const ChatListDrawer = ({
+  open,
+  handleDrawerClose,
+  selectedChat, setSelectedChat
+}: {
+  open: boolean;
+  handleDrawerClose: Function;
+  selectedChat:IChat,
+   setSelectedChat:Function
+}) => {
   const { data, isLoading } = useQuery(["chats"], getChats);
+  
   const theme = useTheme();
 
   return (
@@ -45,16 +58,26 @@ const ChatListDrawer = ({ open, handleDrawerClose }:{ open:boolean, handleDrawer
       open={open}
     >
       <DrawerHeader>
-        <IconButton onClick={()=>handleDrawerClose()}>
+        <IconButton onClick={() => handleDrawerClose()}>
           {theme.direction === "rtl" ? (
             <ChevronLeftIcon />
           ) : (
             <ChevronRightIcon />
           )}
         </IconButton>
-        <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
+        <Link to={"/chats"} style={{textDecoration:'none', color:"black"}}>
+        <Typography
+          style={{ cursor: "pointer" }}
+          onClick={() => setSelectedChat(undefined)}
+          variant="h6"
+          noWrap
+          sx={{ flexGrow: 1 }}
+          component="div"
+        >
           Chats
         </Typography>
+        </Link>
+        
       </DrawerHeader>
       {isLoading && (
         <Box
@@ -69,11 +92,14 @@ const ChatListDrawer = ({ open, handleDrawerClose }:{ open:boolean, handleDrawer
         </Box>
       )}
       <div>
-        
         <List>
           {data &&
             data.map((chat) => (
-             <ChatItems key={chat.id} chat={chat}/>
+              <ChatItems
+                selectChat={setSelectedChat}
+                key={chat.id}
+                chat={chat}
+              />
             ))}
         </List>
       </div>
