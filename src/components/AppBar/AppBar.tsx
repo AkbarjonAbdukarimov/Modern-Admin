@@ -18,6 +18,7 @@ import MainDrawer from "../Drawer/Drawer";
 import INavProps from "../../interfaces/INavProps";
 import { useEffect } from "react";
 import IChat from "../../interfaces/IChat";
+import MessagesButton from "./MessagesButton";
 
 const drawerWidth = 100;
 
@@ -62,8 +63,9 @@ export default function CustomAppBar({
   useEffect(() => {
     axios
       .get("/chats/admin/msgcount")
-      .then((res) => setCount(res.data.unreadMsgs))
+      .then((res) => {setCount(res.data.unreadMsgs)})
       .catch((e) => console.log(e));
+     
   }, []);
   useEffect(() => {
     if (chatPath === "chats") {
@@ -161,16 +163,9 @@ export default function CustomAppBar({
                 alignItems: "center",
               }}
               to={"/chats"}
+              onClick={()=>setCount(0)}
             >
-              <IconButton
-                size="large"
-                aria-label={`${unreadMsgs} new messages`}
-                color="inherit"
-              >
-                <Badge badgeContent={unreadMsgs} color="error">
-                  <MailIcon />
-                </Badge>
-              </IconButton>
+             <MessagesButton msgs={unreadMsgs}/>
               <p className="m-0">Messages</p>
             </Link>
           </MenuItem>
@@ -208,16 +203,9 @@ export default function CustomAppBar({
               <Link
                 style={{ textDecoration: "none", color: "white" }}
                 to={"/chats"}
+                onClick={()=>setCount(0)}
               >
-                <IconButton
-                  size="large"
-                  aria-label={`${unreadMsgs} new messages`}
-                  color="inherit"
-                >
-                  <Badge badgeContent={unreadMsgs} color="error">
-                    <MailIcon />
-                  </Badge>
-                </IconButton>
+               <MessagesButton msgs={unreadMsgs}/>
               </Link>
             )}
 

@@ -51,9 +51,11 @@ export default function App() {
   useEffect(() => {
     const a = localStorage.getItem("admin");
     if (a !== "undefined" && a) {
-      setAdmin(JSON.parse(a));
+      const parsed=JSON.parse(a)
+      setAdmin(parsed);
       socket.connect();
-      socket.emit("newUser", a);
+    
+      socket.emit("newUser", parsed);
     }
   }, []);
 

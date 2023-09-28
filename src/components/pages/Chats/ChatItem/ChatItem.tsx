@@ -9,16 +9,46 @@ import {
 import IChat from "../../../../interfaces/IChat";
 import { socket } from "../../../../socket";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { IMessage } from "../../../../interfaces/IMessage";
 
 export default function ChatItems({
   chat,
   selectChat,
+  selectedChat,
 }: {
   chat: IChat;
   selectChat: Function;
+  selectedChat: IChat;
 }) {
+  const [unreadMsgs, setUnreadMsgs] = useState(chat.unreadMsgs);
+  function handleUnread(msg: IMessage) {
+  
+    if (msg.reciever.toString() === chat.admin.id && !msg.viewed) {
+      setUnreadMsgs((prev) => prev + 1);
+    }
+  }
+  useEffect(() => {
+    if (selectedChat && selectedChat.id === chat.id) {
+      setUnreadMsgs(0);
+    }
+  }, []);
+  useEffect(() => {
+    if (selectedChat && selectedChat.id === chat.id) {
+      setUnreadMsgs(0);
+    }
+  }, [selectedChat]);
+
+
+  useEffect(() => {
+    socket.on(chat.id.toString(), handleUnread);
+    return () => {
+      socket.off(chat.id.toString(), handleUnread);
+    };
+  }, [setUnreadMsgs]);
   return (
-    <Link style={{textDecoration:"none"}}
+    <Link
+      style={{ textDecoration: "none" }}
       to={`/chats/${chat.id}`}
       onClick={() => {
         selectChat(chat);
@@ -28,7 +58,7 @@ export default function ChatItems({
       <ListItem disablePadding>
         <ListItemButton>
           <ListItemIcon>
-            <Badge badgeContent={chat.unreadMsgs} color="error">
+            <Badge badgeContent={unreadMsgs} color="error">
               <Avatar className="" alt="Profile Picture">
                 {chat.user.fullName[0]}
               </Avatar>

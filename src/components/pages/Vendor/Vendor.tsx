@@ -17,7 +17,7 @@ export const Vendor = () => {
   if (isLoading) {
     return <Loading isLoading={isLoading} />
   }
-  console.log(data)
+ 
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 250 },

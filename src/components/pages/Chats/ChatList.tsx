@@ -16,7 +16,6 @@ import axios from "axios";
 import IChat from "../../../interfaces/IChat";
 import { useQuery } from "react-query";
 import ChatItems from "./ChatItem/ChatItem";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import ListLoading from "../../ListLoading";
 const drawerWidth = 200;
@@ -87,6 +86,7 @@ const ChatListDrawer = ({
             data.map((chat) => (
               <ChatItems
                 selectChat={setSelectedChat}
+                selectedChat={selectedChat}
                 key={chat.id}
                 chat={chat}
               />
