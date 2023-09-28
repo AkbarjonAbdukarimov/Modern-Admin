@@ -18,7 +18,8 @@ import { useQuery } from "react-query";
 import ChatItems from "./ChatItem/ChatItem";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-const drawerWidth = 300;
+import ListLoading from "../../ListLoading";
+const drawerWidth = 200;
 
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
@@ -33,15 +34,16 @@ const getChats = () =>
 const ChatListDrawer = ({
   open,
   handleDrawerClose,
-  selectedChat, setSelectedChat
+  selectedChat,
+  setSelectedChat,
 }: {
   open: boolean;
   handleDrawerClose: Function;
-  selectedChat:IChat,
-   setSelectedChat:Function
+  selectedChat: IChat;
+  setSelectedChat: Function;
 }) => {
   const { data, isLoading } = useQuery(["chats"], getChats);
-  
+
   const theme = useTheme();
 
   return (
@@ -65,32 +67,20 @@ const ChatListDrawer = ({
             <ChevronRightIcon />
           )}
         </IconButton>
-        <Link to={"/chats"} style={{textDecoration:'none', color:"black"}}>
-        <Typography
-          style={{ cursor: "pointer" }}
-          onClick={() => setSelectedChat(undefined)}
-          variant="h6"
-          noWrap
-          sx={{ flexGrow: 1 }}
-          component="div"
-        >
-          Chats
-        </Typography>
+        <Link to={"/chats"} style={{ textDecoration: "none", color: "black" }}>
+          <Typography
+            style={{ cursor: "pointer" }}
+            onClick={() => setSelectedChat(undefined)}
+            variant="h6"
+            noWrap
+            sx={{ flexGrow: 1 }}
+            component="div"
+          >
+            Chats
+          </Typography>
         </Link>
-        
       </DrawerHeader>
-      {isLoading && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            height: "100%",
-            alignItems: "center",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      )}
+      {isLoading && <ListLoading />}
       <div>
         <List>
           {data &&

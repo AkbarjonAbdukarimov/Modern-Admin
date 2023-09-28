@@ -4,10 +4,10 @@ import DoneIcon from "@mui/icons-material/Done";
 import { DoneAll } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
 import { IMessage } from "../../../../interfaces/IMessage";
-import IUser from "../../../../interfaces/IUser";
 import { socket } from "../../../../socket";
+import IAdmin from "../../../../interfaces/IAdmin";
 const muted = grey["400"];
-const Message = ({ message, user }: { message: IMessage; user: IUser }) => {
+const Message = ({ message, user }: { message: IMessage; user: IAdmin }) => {
   const image: string[] = ["jpg", "png", "jpeg"];
   const video = ["mp4"];
   const serverURL = "http://localhost:3000";

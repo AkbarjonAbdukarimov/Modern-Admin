@@ -1,10 +1,10 @@
 import { useState } from "react";
 import IChat from "../../../../interfaces/IChat";
-import IUser from "../../../../interfaces/IUser";
 import { socket } from "../../../../socket";
+import IAdmin from "../../../../interfaces/IAdmin";
 
 
-export default function ({ chat, user }: { chat: IChat; user: IUser }) {
+export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
   const [message, setMesage] = useState("");
 
   const handleSubmit = (e) => {
@@ -37,9 +37,10 @@ export default function ({ chat, user }: { chat: IChat; user: IUser }) {
   };
   return (
     <form
+    
       encType=""
       onSubmit={handleSubmit}
-      className="  d-flex justify-content-evenly my-2"
+      className=" d-flex justify-content-evenly my-2"
     >
       <input
         value={message}

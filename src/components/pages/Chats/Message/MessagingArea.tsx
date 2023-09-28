@@ -7,15 +7,40 @@ import Message from "./Message";
 import IAdmin from "../../../../interfaces/IAdmin";
 import IChat from "../../../../interfaces/IChat";
 import { useQuery } from "react-query";
-const getChatDetails = (id:string) =>
-  axios
-    .get<IMessage[]>("/chats/admin/" + id)
-    .then((res) =>res.data);
-export default function MessagingArea({ user, chat }: { user: IAdmin, chat:IChat }) {
-  const [messages, setMessages] = useState<IMessage[]>([]);
-const {data, isLoading}=useQuery(['chat',chat.id],()=>getChatDetails(chat.id))
-  const endRef = useRef<HTMLDivElement | any>();
+import ListLoading from "../../../ListLoading";
+import { NavigateFunction, useNavigate } from "react-router-dom";
+import Chat from "../Chat";
+const Renavigate = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("/chats");
+    return;
+  }, []);
+  return <></>;
+};
 
+export default function MessagingArea({
+  user,
+  chat,
+}: {
+  user: IAdmin;
+  chat: IChat | undefined;
+}) {
+  const [loading, setLoading] = useState(true);
+
+  if (!chat) {
+    return <Renavigate />;
+  }
+
+  const [messages, setMessages] = useState<IMessage[]>([]);
+
+  const endRef = useRef<HTMLDivElement | any>();
+  useEffect(() => {
+    setLoading(true)
+    axios
+      .get<IMessage[]>("/chats/admin/" + chat.id)
+      .then((res) => {setLoading(false);setMessages(res.data)});
+  }, [chat]);
   //scroling logic
   useEffect(() => {
     endRef &&
@@ -28,45 +53,70 @@ const {data, isLoading}=useQuery(['chat',chat.id],()=>getChatDetails(chat.id))
   function sendMessage(msg: IMessage) {
     setMessages((prev) => [...prev, msg]);
   }
+
   useEffect(() => {
-    if (chat) {
-      return () => {};
-    }
-    return setMessages([]);
-  }, [chat]);
-  useEffect(() => {
-    socket.on("sendMessage", sendMessage);
+    socket.on(`sendMessage-${chat.id}`, sendMessage);
     return () => {
-      socket.off("sendMessage", sendMessage);
+      socket.off(`sendMessage-${chat.id}`, sendMessage);
     };
   }, [chat, setMessages]);
-
+  if (loading) {
+    return (
+      <div className="row w-100 p-0">
+        <div
+          style={{
+            width: "98%",
+            maxHeight: "80vh",
+            overflowY: "scroll",
+            position: "absolute",
+            bottom: 50,
+          }}
+          className="h-100 d-flex justify-content-center align-items-center"
+        >
+          <ListLoading />
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className=" w-100 vh-100">
-      <h1>Messaging Area</h1>
-      <div className="h-100 top-container ">
-        <div className="bg-info bg-gradient w-100 px-4 py-2">
-          <h3>{chat.user.fullName}</h3>
-        </div>
-
-        <div className="container mt-4 chat-area ">
-          {messages.length > 0 ? (
-            <div className="pb-3">
-              {messages.map((m) => (
-                <Message key={m.id} message={m} user={user} />
-              ))}
-            </div>
-          ) : (
-            <div className="h-100 d-flex justify-content-center align-items-center">
-              <h5 className="text-muted">No Messages Yet</h5>
-            </div>
-          )}
-          <div ref={endRef} />
-        </div>
-
-        <div className="input-container d-flex justify-content-center bg-light w-100 p-1 ">
-          <MessageForm chat={chat} user={user} />
-        </div>
+    <div className="row w-100 p-0">
+      <div className="container h-100 mt-4 chat-area p-0">
+        {messages && messages.length > 0 ? (
+          <div
+            style={{
+              width: "98%",
+              maxHeight: "80vh",
+              overflowY: "scroll",
+              position: "absolute",
+              bottom: 50,
+            }}
+            className=" p-0 ms-4"
+          >
+            {messages.map((m) => (
+              <Message key={m.id} message={m} user={user} />
+            ))}
+          </div>
+        ) : (
+          <div
+            style={{
+              width: "98%",
+              maxHeight: "80vh",
+              overflowY: "scroll",
+              position: "absolute",
+              bottom: 50,
+            }}
+            className="h-100 d-flex justify-content-center align-items-center"
+          >
+            <h5 className="text-muted">No Messages Yet</h5>
+          </div>
+        )}
+      </div>
+      <div ref={endRef} />
+      <div
+        style={{ height: 50, position: "absolute", bottom: 0 }}
+        className="d-flex justify-content-center w-100 p-0  "
+      >
+        <MessageForm chat={chat} user={user} />
       </div>
     </div>
   );

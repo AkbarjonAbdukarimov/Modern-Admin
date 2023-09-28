@@ -2,7 +2,7 @@ import "./App.css";
 import SignIn from "./components/pages/SignIn";
 import { useEffect, useState } from "react";
 import IAdmin from "./interfaces/IAdmin";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
 import navLinks from "./utils/NavLinks";
@@ -43,6 +43,7 @@ const queryClient = new QueryClient();
 export default function App() {
   const [admin, setAdmin] = useState<IAdmin | undefined>();
   const [selectedChat, setSelectedChat] = useState<IChat>();
+  
   axios.defaults.baseURL = backend + "api";
 
   axios.defaults.headers.common["Authorization"] = admin?.token;
@@ -76,14 +77,12 @@ export default function App() {
 
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/chats" element={<Chat />} />
-                  {selectedChat && (
-                    <Route
+                  <Route
                       path="/chats/:chatId"
                       element={
                         <MessagingArea chat={selectedChat} user={admin} />
                       }
                     />
-                  )}
                   {admin.super ? (
                     <>
                       <Route path="/admins" element={<Admins />}></Route>
