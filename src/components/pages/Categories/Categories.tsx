@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Link } from 'react-router-dom';
 import Loading from '../../Loading';
-import { Button, SpeedDial, SpeedDialIcon } from '@mui/material';
+import {  SpeedDial, SpeedDialIcon } from '@mui/material';
 import axios from 'axios';
 import IError from '../../../interfaces/IError';
 import Errors from '../../Errors';
@@ -38,7 +38,7 @@ export default function Categories() {
             renderCell: (params) => (
                 <Link
                     to={""}
-                    onClick={() => { handleDelete(params.id); }}
+                    onClick={() => { handleDelete(params.id.toString()); }}
 
                 >
                     Delete
@@ -48,7 +48,7 @@ export default function Categories() {
 
     ];
     function handleDelete(id: string) {
-        axios.delete('/categories/' + id).then(res => {
+        axios.delete('/categories/' + id).then(() => {
             return refetch()
         }).catch(e => setErrs(e))
     }

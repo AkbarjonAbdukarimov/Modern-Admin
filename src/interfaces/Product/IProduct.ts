@@ -1,7 +1,6 @@
 import IVendor from "../Vendor/IVendor";
 import IPrice from "./IPrice";
 import IProductMedia from "./IProducMedia";
-import IProps from "./IProps";
 import IReview from "../Review/IReview";
 import IAdmin from "../IAdmin";
 import ICategory from "../ICategory";

@@ -6,19 +6,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FunctionComponent, SyntheticEvent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Price from "./Price";
 import SelectInput from "../../../CustomSelectInput";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import ICategory from "../../../../interfaces/ICategory";
 import { useQuery } from "react-query";
 import ISubcategory from "../../../../interfaces/ISubcategory";
-import Value from "../../Props/Values/Value";
 import Prop from "../../Subcategory/Form/Prop";
 import IPropValue from "../../../../interfaces/Props/IPropValue";
 import { useNavigate } from "react-router-dom";
 import Errors from "../../../Errors";
 import IProp from "../../../../interfaces/Props/IProp";
+import IError from "../../../../interfaces/IError";
 
 interface NewProductProps {}
 export type price = {
@@ -46,13 +46,13 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
   >();
   const [props, setProps] = useState<ISubcategory>();
   const [selectedProps, selectProps] = useState<IPropValue[]>([]);
-  const [err, setError] = useState<[{ message: string }] | undefined>();
+  const [err, setError] = useState<IError[] | undefined>();
 
   const categories = useQuery(["categories-product"], getCategories);
   const navigate = useNavigate();
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+//@ts-ignore
     const data = new FormData(e.target);
     selectedCat && data.append("category", selectedCat.id);
     selectedSubct && data.append("subcategory", selectedSubct.id);
@@ -73,13 +73,15 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
     });
     axios
       .post("/products/new", data)
-      .then((res) => {
+      .then((_res) => {
         navigate("/products");
       })
       .catch((e) => {
-        console.log(e);
+      if(e instanceof AxiosError){
 
-        setError([...e.response.data.errors]);
+        let err:IError[]=e.response!.data.errors
+        setError([...err]);
+      }
       });
   }
   useEffect(() => {
@@ -92,6 +94,8 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
     }
   }, [selectedSubct]);
   const handlePropSelection = (prop: IProp | null) => {
+    //@ts-ignore
+    //need to fix
     prop && selectProps((prev) => [...prev, prop]);
   };
   return (
@@ -147,6 +151,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
               <div className="mb-3">
                 {categories && (
                   <SelectInput
+                  //@ts-ignore
                     data={categories.data}
                     setSelected={setSelectedCat}
                     requestPath="/categories"
@@ -185,6 +190,8 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
               </div>
               <div className="mb-3">
                 {prices.map((p) => (
+                                    //@ts-ignore
+
                   <Price key={p.id} prices={prices} setPrice={setPrices} price={p} />
                 ))}
               </div>

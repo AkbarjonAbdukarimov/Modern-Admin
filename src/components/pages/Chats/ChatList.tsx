@@ -1,11 +1,8 @@
 import {
-  Box,
-  CircularProgress,
   Drawer,
   IconButton,
   List,
   Typography,
-  colors,
   styled,
   useTheme,
 } from "@mui/material";
@@ -38,7 +35,7 @@ const ChatListDrawer = ({
 }: {
   open: boolean;
   handleDrawerClose: Function;
-  selectedChat: IChat;
+  selectedChat: IChat|undefined;
   setSelectedChat: Function;
 }) => {
   const { data, isLoading } = useQuery(["chats"], getChats);

@@ -1,5 +1,5 @@
 import { Container, CssBaseline, Box, Typography, TextField, Button } from '@mui/material';
-import React, { ReactHTML, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Errors from '../../Errors';
 import axios, { AxiosError } from 'axios';
 import IError from '../../../interfaces/IError';
@@ -33,15 +33,16 @@ const PropForm: React.FC<IPropForm> = ({ requestPath, formType, propId }) => {
             console.log(opts)
             await axios(opts)
             navigate('/props')
-        } catch (error) {
+        } catch (error:any) {
             if (error instanceof AxiosError) {
 
-                const { errors } = await error.response.data
+                const { errors } = await error.response!.data
 
                 setError([...errors])
                 return
             }
-            setError([error])
+           
+            setError([{...error, message:error.message}])
         }
 
     }
@@ -113,3 +114,5 @@ const PropForm: React.FC<IPropForm> = ({ requestPath, formType, propId }) => {
     </>
 }
 export default PropForm
+
+

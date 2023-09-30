@@ -1,8 +1,10 @@
 import { IconButton } from "@mui/material";
 import { IValueProps } from "../../Props/Values/Value";
-
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add'
 export default function PropValue({ setValues, value }: IValueProps) {
     function add() {
+        //@ts-ignore
         setValues(prev => {
             return [...prev, { id: parseInt((Math.random() * 1234567890).toString()), value: "" }];
         })

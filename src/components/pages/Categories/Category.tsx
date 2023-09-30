@@ -9,20 +9,19 @@ import IError from '../../../interfaces/IError'
 import { useState } from 'react'
 import Errors from '../../Errors'
 
-type Categories = { id: string, name: string }
 
 const getCategory = (id: string): Promise<ICategory> => axios.get(`/categories/${id}`).then((response) => response.data)
 export default function Category() {
     const [errs, setErrs] = useState<IError[] | undefined>()
     const { id } = useParams()
-    const { isLoading, data, refetch } = useQuery<ICategory>(['category', id], () => getCategory(id))
+    const { isLoading, data, refetch } = useQuery<ICategory>(['category', id], () => getCategory(String(id)))
 
     if (isLoading) {
         return <Loading isLoading={isLoading} />
     }
 
     function handleDelete(id: string) {
-        axios.delete('/categories/' + id).then(res => {
+        axios.delete('/categories/' + id).then(() => {
             return refetch()
         }).catch(e => setErrs(e))
     }
@@ -64,7 +63,7 @@ export default function Category() {
                 <div className='mx-2'><img style={{ width: "45px" }} src={'https://ik.imagekit.io/z6k3ktb71/' + data?.icon?.name} alt="" /></div>
             </div>
             <DataGrid
-                rows={data?.subcategories}
+                rows={data?.subcategories||[]}
                 columns={columns}
                 autoHeight={true}
             />

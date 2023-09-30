@@ -3,7 +3,7 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Errors from "../../Errors";
-import SelectInput from "../../CustomSelectInput";
+import IError from "../../../interfaces/IError";
 
 interface IVendorFormProps {
     formType: "new" | "edit"
@@ -12,7 +12,7 @@ interface IVendorFormProps {
 }
 const VendorForm: React.FunctionComponent<IVendorFormProps> = ({ formType, requestPath, id }) => {
 
-    const [err, setError] = useState<[{ message: string }] | undefined>()
+    const [err, setError] = useState<IError[] | undefined>()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [phone, setPhone] = useState('')
@@ -24,12 +24,13 @@ const VendorForm: React.FunctionComponent<IVendorFormProps> = ({ formType, reque
                 setName(res.data.name)
                 setDescription(res.data.description)
                 setPhone(res.data.contacts.phoneNumber)
-            }).catch(e => setError([...err, e]))
+            }).catch(e => setError([ ...e.response.data.errors]))
         }
     }, [])
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
         e.preventDefault()
         try {
+            //@ts-ignore
             const data = new FormData(e.target);
 
             const obj = Object.fromEntries(data.entries())
@@ -47,10 +48,10 @@ const VendorForm: React.FunctionComponent<IVendorFormProps> = ({ formType, reque
         } catch (error) {
             if (error instanceof AxiosError) {
 
-                const { errors } = error.response.data
+                const { errors } = error.response!.data
 
                 setError([...errors])
-                setOpen(true)
+                // setOpen(true)
             }
         }
 

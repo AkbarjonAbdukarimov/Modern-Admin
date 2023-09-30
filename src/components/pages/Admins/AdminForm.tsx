@@ -7,7 +7,6 @@ import {
   Button,
   FormControl,
   IconButton,
-  Input,
   InputAdornment,
   InputLabel,
   OutlinedInput,
@@ -24,13 +23,22 @@ import SelectInput from "../../CustomSelectInput";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import IAdmin from "../../../interfaces/IAdmin";
 import Loading from "../../Loading";
+import IError from "../../../interfaces/IError";
 
 const getVendors = () =>
   axios.get<IVendor[]>("/vendors").then((res) => res.data);
-export default function AdminForm({ formType, requestPath, id }) {
+export default function AdminForm({
+  formType,
+  requestPath,
+  id,
+}: {
+  formType: string;
+  requestPath: string;
+  id?: string;
+}) {
   const [showPassword, setShowPassword] = React.useState(false);
   const vendors = useQuery<IVendor[]>(["admin-vendors"], getVendors);
-  const [err, setError] = useState<[{ message: string }] | undefined>();
+  const [err, setError] = useState<IError[] | undefined>();
   const [vendor, setVendor] = useState<IVendor>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -52,17 +60,20 @@ export default function AdminForm({ formType, requestPath, id }) {
         .then((res) => {
           setEmail(res.data.email);
           setIsSuper(res.data.super);
-          setVendor(res.data.vendorId)
+          setVendor(res.data.vendorId);
         })
         .catch((e) => {
-          console.log(e)
+          console.log(e);
           if (e instanceof AxiosError) {
-            const { errors } = e.response.data;
-            setError([...err,...errors]);
-            return;
+            const { errors }: { errors: IError[] } = e.response!.data;
+            if (err) {
+              setError([...err, ...errors]);
+              return;
+            }
+            setError([ ...errors]);
+            return
           }
           setError([e]);
-
         });
     }
   }, []);
@@ -85,21 +96,18 @@ export default function AdminForm({ formType, requestPath, id }) {
       });
       navigate("/admins");
     } catch (error) {
-     
       if (error instanceof AxiosError) {
-        const { errors } = error.response.data;
+        const { errors }: { errors: IError[] } = error.response!.data;
+
         setError([...errors]);
       }
     }
   }
-  if(vendors.isLoading){
-    return<Loading isLoading={vendors.isLoading}/>
-
+  if (vendors.isLoading) {
+    return <Loading isLoading={vendors.isLoading} />;
   }
   return (
     <>
-   
-
       <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
         <Container component="main" sx={{ width: "50ch" }}>
           <CssBaseline />
@@ -158,14 +166,14 @@ export default function AdminForm({ formType, requestPath, id }) {
               <SelectInput
                 setSelected={setVendor}
                 label={"Vendors"}
-                data={vendors.data}
+                data={vendors.data||[]}
               />
 
               <FormControlLabel
-                control={<Checkbox checked={isSuper}  name="super" />}
+                control={<Checkbox checked={isSuper} name="super" />}
                 label="Super Admin"
                 value={isSuper}
-                onChange={(e) => setIsSuper(e.target.checked)}
+                onChange={(e:any) => setIsSuper(e.target.checked)}
               />
 
               <Button

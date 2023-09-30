@@ -19,7 +19,7 @@ export const Vendors = () => {
   function handleDelete(id: string) {
     axios
       .delete("/vendors/" + id)
-      .then((res) => {
+      .then((_res) => {
         return refetch();
       })
       .catch((e) => setErrs([...e.response.data.errors]));

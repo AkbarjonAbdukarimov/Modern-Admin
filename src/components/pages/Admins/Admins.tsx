@@ -43,7 +43,7 @@ const Admins = () => {
             <div style={{ height: 400, width: '100%' }}>
 
                 <DataGrid
-                    rows={data}
+                    rows={data||[]}
                     columns={columns}
                     initialState={{
                         pagination: {

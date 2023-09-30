@@ -5,7 +5,6 @@ import { useQuery } from "react-query"
 import { Link, useParams } from "react-router-dom"
 import IError from "../../../interfaces/IError"
 import Loading from "../../Loading"
-import { SpeedDial, SpeedDialIcon } from "@mui/material"
 import { GridColDef, DataGrid } from "@mui/x-data-grid"
 import Errors from "../../Errors"
 const getVendor = (id: string): Promise<IVendor> => axios.get<IVendor>(`/vendors/${id}`).then((response) => response.data)
@@ -49,7 +48,7 @@ export const Vendor = () => {
   ];
 
   function handleDelete(id: string) {
-    axios.delete('/products/delete/' + id).then(res => {
+    axios.delete('/products/delete/' + id).then(_res => {
       return refetch()
     }).catch(e => setErrs([...e.response.date.errors]))
   }

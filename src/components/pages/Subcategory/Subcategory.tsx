@@ -5,7 +5,6 @@ import { Typography } from "@mui/material";
 import Loading from "../../Loading";
 import axios from "axios";
 import { useQuery } from "react-query";
-import { useState } from "react";
 
 const getSubcategory = (id: string): Promise<ISubcategory> =>
   axios
@@ -16,7 +15,7 @@ const getSubcategory = (id: string): Promise<ISubcategory> =>
     })
     .then((res) => res.data);
 
-const columns: GridColDef<ISubcategory["props"]>[] = [
+const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 70 },
   {
     field: "name",
@@ -46,10 +45,10 @@ const columns: GridColDef<ISubcategory["props"]>[] = [
 
 export default function Subcategory() {
   const { subCtId } = useParams();
-  const [err, setError] = useState<[{ message: string }] | undefined>();
+  //const [err, setError] = useState<[{ message: string }] | undefined>();
 
   const { isLoading, data } = useQuery(["subcatecody", subCtId], () =>
-    getSubcategory(subCtId)
+    getSubcategory(String(subCtId))
   );
   if (isLoading) {
     return <Loading isLoading={isLoading} />;

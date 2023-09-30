@@ -2,7 +2,7 @@ import "./App.css";
 import SignIn from "./components/pages/SignIn";
 import { useEffect, useState } from "react";
 import IAdmin from "./interfaces/IAdmin";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
 import navLinks from "./utils/NavLinks";

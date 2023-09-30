@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { useParams } from "react-router-dom";
 import IProduct from "../../../interfaces/Product/IProduct";
 import { useQuery } from "react-query";
 import Loading from "../../Loading";
@@ -18,18 +18,16 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { List, ListItem } from "@mui/material";
-import AdminContext from "../../../context/AdminContext";
-const getProduct = ({ queryKey }): Promise<IProduct> =>
+const getProduct = (id:string) =>
   axios
-    .get<IProduct>(`/products/${queryKey[1]}`)
+    .get<IProduct>(`/products/${id}`)
     .then((res) => res.data)
     .catch((e) => e.response.data);
 export default function Product() {
   const { id } = useParams();
-  const product = useQuery<IProduct>(["product", id], getProduct);
-  const { admin } = useContext(AdminContext);
+  //@ts-ignore
+  const product = useQuery<IProduct>(["product", id], ()=>getProduct(id));
   const [expanded, setExpanded] = React.useState(false);
-  const navigate = useNavigate();
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };

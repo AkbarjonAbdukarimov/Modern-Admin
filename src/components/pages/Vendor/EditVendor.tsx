@@ -1,4 +1,3 @@
-import React from 'react'
 import VendorForm from './VendorForm'
 import { useParams } from 'react-router-dom'
 export const EditVendor = () => {

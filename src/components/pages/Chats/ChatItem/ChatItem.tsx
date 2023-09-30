@@ -19,7 +19,7 @@ export default function ChatItems({
 }: {
   chat: IChat;
   selectChat: Function;
-  selectedChat: IChat;
+  selectedChat: IChat|undefined;
 }) {
   const [unreadMsgs, setUnreadMsgs] = useState(chat.unreadMsgs);
   function handleUnread(msg: IMessage) {

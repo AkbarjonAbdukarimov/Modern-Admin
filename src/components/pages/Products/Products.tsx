@@ -1,4 +1,4 @@
-import { FunctionComponent, useContext, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { SpeedDial, SpeedDialIcon } from "@mui/material";
@@ -8,14 +8,11 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import IProduct from "../../../interfaces/Product/IProduct";
 import IError from "../../../interfaces/IError";
 import Errors from "../../Errors";
-import AdminContext from "../../../context/AdminContext";
 
 interface Product {
-  data: {
-    products: IProduct[];
-    page: number;
-    totalCount: number;
-  };
+  products: IProduct[];
+  page: number;
+  totalCount: number;
 }
 const getProducts = () =>
   axios.get<Product>("/products/admin").then((res) => res.data);
@@ -25,11 +22,11 @@ const Products: FunctionComponent = () => {
     getProducts
   );
   const [errs, setErrs] = useState<IError[] | undefined>();
-  const { setAdmin } = useContext(AdminContext);
+
   function handleDelete(id: string) {
     axios
       .delete("/products/delete/" + id)
-      .then((res) => {
+      .then((_res) => {
         return refetch();
       })
       .catch((e) => setErrs([...e.response.data.errors]));
@@ -76,7 +73,7 @@ const Products: FunctionComponent = () => {
         <Link
           to={"/products"}
           onClick={() => {
-            handleDelete(params.id);
+            handleDelete(params.id.toString());
           }}
         >
           Delete

@@ -15,7 +15,7 @@ const getProp = (propId: string): Promise<IFormatedProps> =>
 export default function PropDetails() {
   const { propId } = useParams();
 
-  const { isLoading, data } = useQuery(["prop", propId], () => getProp(propId));
+  const { isLoading, data } = useQuery(["prop", propId], () => getProp(String(propId)));
   console.log(data);
   if (isLoading) {
     return <Loading isLoading={isLoading} />;

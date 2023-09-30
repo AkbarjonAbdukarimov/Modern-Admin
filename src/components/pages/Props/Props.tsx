@@ -8,7 +8,7 @@ import Errors from "../../Errors"
 import { useState } from "react"
 import IError from "../../../interfaces/IError"
 
-const getProps = () => axios.get('/props')
+const getProps = () => axios.get('/props').then(res=>res.data)
 
 export default function Props() {
     const { isLoading, data, refetch } = useQuery(['props'], getProps)
@@ -35,7 +35,7 @@ export default function Props() {
             renderCell: (params) => (
                 <Link
                     to={""}
-                    onClick={() => { handleDelete(params.id); }}
+                    onClick={() => { handleDelete(params.id.toString()); }}
 
                 >
                     Delete
@@ -49,7 +49,7 @@ export default function Props() {
 
 
     function handleDelete(id: string) {
-        axios.delete('/props/delete/' + id).then(res => {
+        axios.delete('/props/delete/' + id).then(_res => {
             return refetch()
         }).catch(e => setErrs(e))
     }
@@ -64,7 +64,7 @@ export default function Props() {
             <div style={{ height: 400, width: '100%' }}>
 
                 <DataGrid
-                    rows={data.data}
+                    rows={data||[]}
                     columns={columns}
                     initialState={{
                         pagination: {

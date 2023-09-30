@@ -10,14 +10,20 @@ import * as reactRouterDom from "react-router-dom";
 import INavProps from "../../interfaces/INavProps";
 import { useContext } from "react";
 import AdminContext from "../../context/AdminContext";
+import IAdmin from "../../interfaces/IAdmin";
 interface IProps {
   navlinks: INavProps[];
   toggleDrawer: (st: boolean) => void;
 }
 
 export default function NavigationItems({ toggleDrawer, navlinks }: IProps) {
-  const { admin } = useContext(AdminContext);
+  const context = useContext(AdminContext);
+  let admin: IAdmin;
+  if(context&&context.admin){
+    admin=context.admin
+  }
   const list = () => (
+    //@ts-ignore
     <Box
       sx={{ width: 250 }}
       role="presentation"

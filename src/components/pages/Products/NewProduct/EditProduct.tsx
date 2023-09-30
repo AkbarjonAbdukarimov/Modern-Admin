@@ -13,8 +13,8 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-import { useState, useEffect, useContext } from "react";
+import RemoveIcon from '@mui/icons-material/Remove';
+import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import ISubcategory from "../../../../interfaces/ISubcategory";
@@ -28,8 +28,8 @@ import IPrice from "../../../../interfaces/Product/IPrice";
 import Loading from "../../../Loading";
 import CustomSelectInput from "../../../CustomSelectInput";
 import "./EditProduct.css";
-import AdminContext from "../../../../context/AdminContext";
 import IProductMedia from "../../../../interfaces/Product/IProducMedia";
+import IError from "../../../../interfaces/IError";
 export type price = {
   id: number;
   qtyMin: number;
@@ -61,16 +61,15 @@ export default function EditProduct() {
   const [oldProps, setOldProps] = useState<IPropValue[]>([]);
   const [props, setProps] = useState<ISubcategory>();
   const [selectedProps, selectProps] = useState<IPropValue[]>([]);
-  const [err, setError] = useState<[{ message: string }] | undefined>();
+  const [err, setError] = useState<IError[] | undefined>();
   const [product, setProduct] = useState<IProduct | undefined>();
   const [delFiles, setDelFiles] = useState<IProductMedia[] | undefined>();
   const categories = useQuery(["categories-product"], getCategories);
   const navigate = useNavigate();
-  const { admin } = useContext(AdminContext);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: HTMLFormElement) {
     e.preventDefault();
-
+//@ts-ignore
     const data = new FormData(e.target);
     selectedCat && data.append("category", selectedCat.id);
     selectedSubct && data.append("subcategory", selectedSubct.id);
@@ -122,6 +121,8 @@ export default function EditProduct() {
         );
         setOldCat(data.category);
         setOldSubct(data.subcategory);
+        //@ts-ignore
+        //need to update
         setOldProps(data.props);
         setProduct(data);
       })
@@ -137,6 +138,7 @@ export default function EditProduct() {
     }
   }, [selectedSubct]);
   const handlePropSelection = (prop: IProp | null) => {
+    //@ts-ignore
     prop && selectProps((prev) => [...prev, prop]);
   };
   if (!product) {
@@ -145,7 +147,10 @@ export default function EditProduct() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
+   
+      <form
+       //@ts-ignore
+       onSubmit={handleSubmit} noValidate encType="multipart/form-data">
         <Container component="main">
           <CssBaseline />
 

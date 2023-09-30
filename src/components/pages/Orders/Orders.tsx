@@ -1,5 +1,5 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import React, { useState } from "react";
+import  { useState } from "react";
 import Errors from "../../Errors";
 import IOrder from "../../../interfaces/Order/IOrder";
 import axios from "axios";
@@ -8,8 +8,8 @@ import IError from "../../../interfaces/IError";
 const getOrders = () =>
   axios.get<IOrder[]>("/orders/vendor").then((res) => {;console.log(res.data);return res.data});
 export default function Orders() {
-  const [errs, setErrs] = useState<IError[] | undefined>();
-  const { isLoading, data, refetch, isError, error } = useQuery(
+  const [errs, _setErrs] = useState<IError[] | undefined>();
+  const { data } = useQuery(
     ["orders"],
     getOrders
   );

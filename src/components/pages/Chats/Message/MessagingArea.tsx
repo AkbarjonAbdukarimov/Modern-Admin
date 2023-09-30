@@ -6,10 +6,8 @@ import MessageForm from "./MessageForm";
 import Message from "./Message";
 import IAdmin from "../../../../interfaces/IAdmin";
 import IChat from "../../../../interfaces/IChat";
-import { useQuery } from "react-query";
 import ListLoading from "../../../ListLoading";
-import { NavigateFunction, useNavigate } from "react-router-dom";
-import Chat from "../Chat";
+import { useNavigate } from "react-router-dom";
 const Renavigate = () => {
   const navigate = useNavigate();
   useEffect(() => {

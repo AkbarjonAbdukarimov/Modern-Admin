@@ -6,11 +6,10 @@ import Toolbar from "@mui/material/Toolbar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import MailIcon from "@mui/icons-material/Mail";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ChatIcon from "@mui/icons-material/Chat";
 import { AccountCircle } from "@mui/icons-material";
-import { Menu, MenuItem, Badge } from "@mui/material";
+import { Menu, MenuItem } from "@mui/material";
 import axios from "axios";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import ChatListDrawer from "../pages/Chats/ChatList";
@@ -51,7 +50,7 @@ export default function CustomAppBar({
 }: {
   navLinks: INavProps[];
   setUser: Function;
-  selectedChat: IChat;
+  selectedChat: IChat|undefined;
   setSelectedChat: Function;
 }) {
   const { pathname } = useLocation();

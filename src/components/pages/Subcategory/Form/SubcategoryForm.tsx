@@ -16,8 +16,9 @@ import Prop from "./Prop";
 import SelectInput from "../../../CustomSelectInput";
 import IProp from "../../../../interfaces/Props/IProp";
 import IPropValue from "../../../../interfaces/Props/IPropValue";
-import { useQueries, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import Loading from "../../../Loading";
+import IError from "../../../../interfaces/IError";
 interface ISubcategoryForm {
   requestPath: string;
   formType: "new" | "edit";
@@ -39,15 +40,16 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
     queryFn: getAllPropsValues,
   });
 
-  const [err, setError] = useState<[{ message: string }] | undefined>();
+  const [err, setError] = useState<IError[] | undefined>();
 
   const [name, setName] = useState("");
-  const [removedProps, setRemovedProps] = useState([]);
+ // const [removedProps, setRemovedProps] = useState([]);
   const [subctProps, setSubctProps] = useState<ISubcategory["props"]>();
-  const [newProps, setNewProps] = useState<IPropValue[] | undefined>([]);
+  const [newProps, setNewProps] = useState<IPropValue[] >([]);
   const navigate = useNavigate();
 
   const handlePropSelection = (prop: IProp|null) => {
+    //@ts-ignore
     prop&&setNewProps((prev) => [...prev, prop]);
   };
   
@@ -60,7 +62,7 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
           setName(res.data.name);
           setSubctProps(res.data.props);
         })
-        .catch((e) => setError([...err, e]));
+        .catch((e) => setError([...e.response.data.errors]));
     }
   }, []);
   async function handleSubmit(
@@ -83,7 +85,7 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
        navigate("/categories/");
     } catch (error) {
       if (error instanceof AxiosError) {
-        const { errors } = error.response.data;
+        const { errors } = error.response!.data;
 
         setError([...errors]);
       }
@@ -126,7 +128,7 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
                 {props && (
                   <SelectInput
                     setSelected={handlePropSelection}
-                    data={props.data}
+                    data={props.data||[]}
                     label="Properties"
                   />
                 )}
@@ -152,6 +154,7 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
                       {subctProps.map((p) => (
                         <Prop
                           displayItems={2}
+                          //@ts-ignore
                           setProps={setSubctProps}
                           key={p.id}
                           prop={p}

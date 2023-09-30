@@ -1,4 +1,3 @@
-import IProps from "./Product/IProps";
 import IPropValue from "./Props/IPropValue";
 
 export default interface ISubcategory {

@@ -8,7 +8,7 @@ export default function MessagesButton({ msgs }: { msgs: number }) {
   const [unreadMsgs, setUnreadMsgs] = useState(msgs);
  
 
-  function handleUnread(msg: IMessage) {
+  function handleUnread(_msg: IMessage) {
     setUnreadMsgs((prev) => prev + 1);
   }
 

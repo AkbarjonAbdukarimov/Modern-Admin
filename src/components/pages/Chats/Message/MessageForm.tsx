@@ -3,11 +3,10 @@ import IChat from "../../../../interfaces/IChat";
 import { socket } from "../../../../socket";
 import IAdmin from "../../../../interfaces/IAdmin";
 
-
 export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
   const [message, setMesage] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: HTMLFormElement) => {
     e.preventDefault();
     if (message.length > 0) {
       const msg = {
@@ -20,16 +19,17 @@ export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
       setMesage("");
     }
   };
-  const handleFileSubmit = (e) => {
+  const handleFileSubmit = (e: HTMLFormElement) => {
     const msg = {
-      reciever: chat.user.id || chat.user._id,
+      reciever: chat.user.id,
 
       sender: user.id,
       chat: chat.id,
 
       file: {
-        buffer: e.target.files[0],
-        type: e.target.files[0].type,
+        //@ts-ignore
+        buffer: e.target.files[0], //@ts-ignore
+        type: e.target.files[0].type, //@ts-ignore
         originalName: e.target.files[0].name,
       },
     };
@@ -37,8 +37,8 @@ export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
   };
   return (
     <form
-    
       encType=""
+      //@ts-ignore
       onSubmit={handleSubmit}
       className=" d-flex justify-content-evenly my-2"
     >
@@ -82,6 +82,8 @@ export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
           </g>
         </svg>
         <input
+          //@ts-ignore
+
           onChange={handleFileSubmit}
           type="file"
           hidden

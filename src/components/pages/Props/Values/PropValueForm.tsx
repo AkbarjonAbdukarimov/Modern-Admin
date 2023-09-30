@@ -3,7 +3,7 @@ import {
   CssBaseline,
   Box,
   Typography,
-  TextField,
+  
   Button,
 } from "@mui/material";
 import axios, { AxiosError } from "axios";
@@ -22,7 +22,7 @@ const PropValueForm: React.FC<IValueForm> = ({
   requestPath,
   formType,
   propId,
-  valueId,
+  
 }) => {
   const [prop, setProp] = useState();
   const [values, setValues] = useState<value[]>([
@@ -45,8 +45,9 @@ const PropValueForm: React.FC<IValueForm> = ({
         })
       );
   }, []);
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e:HTMLFormElement) {
     e.preventDefault();
+    //@ts-ignore
     const data = new FormData(e.target);
 
     const values: string[] = [];
@@ -66,20 +67,23 @@ const PropValueForm: React.FC<IValueForm> = ({
 
       await axios(opts);
       navigate("/props/" + propId);
-    } catch (error) {
+    } catch (error:any) {
       if (error instanceof AxiosError) {
-        const { errors } = await error.response.data;
+        const { errors } = await error.response!.data;
 
         setError([...errors]);
         return;
       }
-      setError([error]);
+      setError([{message:error.message}]);
     }
   }
   if (!prop) return <></>;
   return (
     <div>
-      <form noValidate onSubmit={handleSubmit}>
+      
+      <form noValidate
+      //@ts-ignore
+       onSubmit={handleSubmit}>
         <Container component="main">
           <CssBaseline />
 
@@ -93,11 +97,13 @@ const PropValueForm: React.FC<IValueForm> = ({
           >
             <Typography component="h1" variant="h5">
               {formType === "new"
-                ?
+                ?//@ts-ignore
                 `New Values for ${prop.name} Property  `
                 : "Edit Property"}
                 <br />
-                Label: {prop.label}
+                {//@ts-ignore
+                }Label: {prop.label}
+                
             </Typography>
 
             <Box sx={{ mt: 1 }}>

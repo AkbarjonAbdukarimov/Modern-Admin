@@ -5,5 +5,5 @@ interface IAdminContex {
   admin: IAdmin | undefined;
   setAdmin: Function;
 }
-const AdminContext = createContext<IAdminContex | object>({});
+const AdminContext = createContext<IAdminContex|null>(null);
 export default AdminContext;

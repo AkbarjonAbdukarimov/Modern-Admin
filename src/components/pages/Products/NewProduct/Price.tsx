@@ -1,15 +1,15 @@
 import { FormControl, IconButton, Input, InputLabel } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Dispatch, useState } from "react";
-import { price } from "./NewProduct";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import DoneIcon from "@mui/icons-material/Done";
 import EditIcon from "@mui/icons-material/Edit";
+import IPrice from "../../../../interfaces/Product/IPrice";
 interface IPriceProps {
-  setPrice: Dispatch<React.SetStateAction<price[]>>;
-  price: price;
-  prices: price[];
+  setPrice: (fn: (prev: IPrice[]) => IPrice[]) => void;
+  price: IPrice;
+  prices: IPrice[];
 }
 export default function Price({ setPrice, price, prices }: IPriceProps) {
   const [qtyMin, setMin] = useState(price.qtyMin);
@@ -31,10 +31,11 @@ export default function Price({ setPrice, price, prices }: IPriceProps) {
       }
       return p;
     });
-    setPrice(updPr);
+    setPrice((_prev) => updPr);
     console.log(updPr);
   }
   function addPrice() {
+    //@ts-ignore
     setPrice((prev) => {
       return [
         ...prev,
@@ -48,16 +49,16 @@ export default function Price({ setPrice, price, prices }: IPriceProps) {
       ];
     });
   }
-  function updatePrice(e) {
-    setPrice((prev) =>
-      prev.map((p) => {
-        if (p.id === price.id) {
-          p[e.target.name] = e.target.value;
-        }
-        return p;
-      })
-    );
-  }
+  // function updatePrice(e) {
+  //   setPrice((prev) =>
+  //     prev.map((p) => {
+  //       if (p.id === price.id) {
+  //         p[e.target.name] = e.target.value;
+  //       }
+  //       return p;
+  //     })
+  //   );
+  // }
   function removePrice() {
     setPrice((prev) => {
       if (prev.length > 1) {
@@ -75,6 +76,7 @@ export default function Price({ setPrice, price, prices }: IPriceProps) {
       >
         <InputLabel htmlFor={price.id + "qtyMin"}>Minimum Amount</InputLabel>
         <Input
+          //@ts-ignore
           onChange={(e) => setMin(e.target.value)}
           value={qtyMin}
           name={"qtyMin"}
@@ -88,6 +90,7 @@ export default function Price({ setPrice, price, prices }: IPriceProps) {
       >
         <InputLabel htmlFor={price.id + "qtyMax"}>Maximum Amount</InputLabel>
         <Input
+          //@ts-ignore
           onChange={(e) => setMax(e.target.value)}
           value={qtyMax}
           name={"qtyMax"}
@@ -101,6 +104,8 @@ export default function Price({ setPrice, price, prices }: IPriceProps) {
       >
         <InputLabel htmlFor={price.id + "price"}>Price</InputLabel>
         <Input
+          //@ts-ignore
+
           onChange={(e) => setPr(e.target.value)}
           value={pr}
           name={"price"}
@@ -114,6 +119,8 @@ export default function Price({ setPrice, price, prices }: IPriceProps) {
       >
         <InputLabel htmlFor={price.id + "oldPrice"}>Old Price</InputLabel>
         <Input
+          //@ts-ignore
+
           onChange={(e) => setOldpr(e.target.value)}
           value={oldPr}
           name={"oldPrice"}

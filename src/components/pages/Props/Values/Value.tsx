@@ -1,18 +1,19 @@
 import { FormControl, IconButton, Input, InputLabel } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Dispatch, FunctionComponent } from 'react';
 
 export interface value {
     id: string;
     value: string
 }
+type fn=(prev:value[])=>value[]
 export interface IValueProps {
-    setValues: Dispatch<React.SetStateAction<value[]>>
+    setValues: (fn:fn)=>void
     value: value
 }
 export default function Value({ setValues, value }: IValueProps) {
     function add() {
+        //@ts-ignore
         setValues(prev => {
             return [...prev, { id: parseInt((Math.random() * 1234567890).toString()), value: "" }];
         })
