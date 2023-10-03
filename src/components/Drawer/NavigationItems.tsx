@@ -11,19 +11,24 @@ import INavProps from "../../interfaces/INavProps";
 import { useContext } from "react";
 import AdminContext from "../../context/AdminContext";
 import IAdmin from "../../interfaces/IAdmin";
+import IconListNav from "./IconListNav"
+import "../../style/list.scss"
+
+
 interface IProps {
   navlinks: INavProps[];
   toggleDrawer: (st: boolean) => void;
 }
 
 export default function NavigationItems({ toggleDrawer, navlinks }: IProps) {
+  const location = reactRouterDom.useLocation()
   const context = useContext(AdminContext);
   let admin: IAdmin;
-  if(context&&context.admin){
-    admin=context.admin
+  if (context && context.admin) {
+    admin = context.admin
   }
   const list = () => (
-    //@ts-ignore
+    // @ts-ignore
     <Box
       sx={{ width: 250 }}
       role="presentation"
@@ -31,36 +36,32 @@ export default function NavigationItems({ toggleDrawer, navlinks }: IProps) {
       onKeyDown={toggleDrawer(false)}
     >
       {navlinks && navlinks.length > 0 && (
-        <List>
+        <List className="list__nav">
           {navlinks.map((link) => {
             if (admin.super) {
               return (
-                <ListItem key={link.name} disablePadding>
-                  <ListItemButton>
-                    <reactRouterDom.Link
-                      to={link.to}
-                      style={{ textDecoration: "none", display: "inline" }}
-                    >
+                <reactRouterDom.Link to={link.to} style={{ textDecoration: "none", display: "inline" }}>
+                  <ListItem key={link.name} disablePadding className={`list__nav__button ${link.to === location.pathname && "active"}`}>
+                    <ListItemButton >
+                      <IconListNav links={link.to} />
                       <ListItemText primary={link.name} />
-                    </reactRouterDom.Link>
-                  </ListItemButton>
-                  <Divider />
-                </ListItem>
+                    </ListItemButton>
+                    <Divider />
+                  </ListItem>
+                </reactRouterDom.Link>
               );
             } else {
               if (!link.super) {
                 return (
-                  <ListItem key={link.name} disablePadding>
-                    <ListItemButton>
-                      <reactRouterDom.Link
-                        to={link.to}
-                        style={{ textDecoration: "none", display: "inline" }}
-                      >
+                  <reactRouterDom.Link to={link.to} style={{ textDecoration: "none", display: "inline" }}>
+                    <ListItem key={link.name} disablePadding className={`list__nav__button ${link.to === location.pathname && "active"}`}>
+                      <ListItemButton>
+                        <IconListNav links={link.to} />
                         <ListItemText primary={link.name} />
-                      </reactRouterDom.Link>
-                    </ListItemButton>
-                    <Divider />
-                  </ListItem>
+                      </ListItemButton>
+                      <Divider />
+                    </ListItem>
+                  </reactRouterDom.Link>
                 );
               }
             }
