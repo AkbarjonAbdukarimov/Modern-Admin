@@ -6,11 +6,12 @@ import { grey } from "@mui/material/colors";
 import { IMessage } from "../../../../interfaces/IMessage";
 import { socket } from "../../../../socket";
 import IAdmin from "../../../../interfaces/IAdmin";
+import { backend } from "../../../../URLS";
 const muted = grey["400"];
 const Message = ({ message, user }: { message: IMessage; user: IAdmin }) => {
   const image: string[] = ["jpg", "png", "jpeg"];
   const video = ["mp4"];
-  const serverURL = "http://localhost:3000";
+  const serverURL = backend;
   const [viewed, setViewed] = useState<boolean>(message.viewed);
 
   function sendMessage(msg: IMessage) {
