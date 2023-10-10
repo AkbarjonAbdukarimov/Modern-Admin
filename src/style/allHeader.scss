@@ -1,0 +1,16 @@
+.allHeader {
+  background-color: #512ddd !important;
+}
+
+::-webkit-scrollbar {
+  width: 0.4em;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #512ddd;
+  border-radius: 10em;
+}
+
+::-webkit-scrollbar-track {
+  background: #1d1e42;
+}
