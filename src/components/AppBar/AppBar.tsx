@@ -18,6 +18,7 @@ import INavProps from "../../interfaces/INavProps";
 import { useEffect } from "react";
 import IChat from "../../interfaces/IChat";
 import MessagesButton from "./MessagesButton";
+import "../../style/allHeader.scss"
 
 const drawerWidth = 100;
 
@@ -189,7 +190,7 @@ export default function CustomAppBar({
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} className="allHeader">
         <Toolbar>
           <MainDrawer navlinks={navLinks} />
 
