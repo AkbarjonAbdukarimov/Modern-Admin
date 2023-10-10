@@ -1,1 +1,1 @@
-export const backend="http://api.modernshop.uz/"
+export const backend="https://api.modernshop.uz/"
