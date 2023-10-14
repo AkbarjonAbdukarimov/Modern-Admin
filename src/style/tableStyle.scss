@@ -97,11 +97,13 @@ $tableSecondColor: #26264f;
     line-height: 20px;
     color: white;
   }
-}
 
-//   div:nth-child(odd) {
-//     background: #1d1e42 !important;
-//   }
-//   div:nth-child(even) {
-//     background: #26264f !important;
-//   }
+  .MuiDataGrid-overlay {
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+    color: white;
+    padding: 40px 0;
+  }
+}
