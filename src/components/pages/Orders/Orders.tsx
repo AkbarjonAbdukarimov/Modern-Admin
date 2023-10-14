@@ -5,7 +5,6 @@ import IOrder from "../../../interfaces/Order/IOrder";
 import axios from "axios";
 import { useQuery } from "react-query";
 import IError from "../../../interfaces/IError";
-import { Link } from "react-router-dom";
 const getOrders = () =>
   axios.get<IOrder[]>("/orders/vendor").then((res) => { ; console.log(res.data); return res.data });
 export default function Orders() {
