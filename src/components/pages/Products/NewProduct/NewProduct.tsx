@@ -20,8 +20,8 @@ import { useNavigate } from "react-router-dom";
 import Errors from "../../../Errors";
 import IProp from "../../../../interfaces/Props/IProp";
 import IError from "../../../../interfaces/IError";
-import LoadingButton from "../../../LoadingButton";
 import { green } from "@mui/material/colors";
+import IPrice from "../../../../interfaces/Product/IPrice";
 
 interface NewProductProps {}
 export type price = {
