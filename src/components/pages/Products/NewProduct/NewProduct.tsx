@@ -1,12 +1,13 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   CssBaseline,
   TextField,
   Typography,
 } from "@mui/material";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 import Price from "./Price";
 import SelectInput from "../../../CustomSelectInput";
 import axios, { AxiosError } from "axios";
@@ -19,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 import Errors from "../../../Errors";
 import IProp from "../../../../interfaces/Props/IProp";
 import IError from "../../../../interfaces/IError";
+import LoadingButton from "../../../LoadingButton";
+import { green } from "@mui/material/colors";
 
 interface NewProductProps {}
 export type price = {
@@ -32,7 +35,7 @@ export type price = {
 const getCategories = () =>
   axios.get<ICategory[]>("/categories").then((res) => res.data);
 const NewProduct: FunctionComponent<NewProductProps> = () => {
-  const [prices, setPrices] = useState<price[]>([
+  const [prices, setPrices] = useState<IPrice[]>([
     {
       id: parseInt((Math.random() * 1234567890).toString()),
       qtyMax: 0,
@@ -50,9 +53,38 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
 
   const categories = useQuery(["categories-product"], getCategories);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const timer =useRef<number>();
+
+  const buttonSx = {
+    
+    ...(success && {
+      bgcolor: green[500],
+      '&:hover': {
+        bgcolor: green[700],
+      },
+    }),
+    width:"100%",
+  };
+
+useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
+
+  const handleButtonClick = () => {
+    if (!loading) {
+      setSuccess(false);
+      setLoading(true);
+     
+    }
+  };
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-//@ts-ignore
+    handleButtonClick()
+    //@ts-ignore
     const data = new FormData(e.target);
     selectedCat && data.append("category", selectedCat.id);
     selectedSubct && data.append("subcategory", selectedSubct.id);
@@ -74,14 +106,19 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
     axios
       .post("/products/new", data)
       .then((_res) => {
+        timer.current = window.setTimeout(() => {
+          setSuccess(true);
+          setLoading(false);
+        }, 1000);
         navigate("/products");
       })
       .catch((e) => {
-      if(e instanceof AxiosError){
-
-        let err:IError[]=e.response!.data.errors
-        setError([...err]);
-      }
+        setLoading(false)
+        setSuccess(false)
+        if (e instanceof AxiosError) {
+          let err: IError[] = e.response!.data.errors;
+          setError([...err]);
+        }
       });
   }
   useEffect(() => {
@@ -151,7 +188,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
               <div className="mb-3">
                 {categories && (
                   <SelectInput
-                  //@ts-ignore
+                    //@ts-ignore
                     data={categories.data}
                     setSelected={setSelectedCat}
                     requestPath="/categories"
@@ -190,20 +227,41 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
               </div>
               <div className="mb-3">
                 {prices.map((p) => (
-                                    //@ts-ignore
+                  //@ts-ignore
 
-                  <Price key={p.id} prices={prices} setPrice={setPrices} price={p} />
+                  <Price
+                    key={p.id}
+                    prices={prices}
+                    setPrice={setPrices}
+                    price={p}
+                  />
                 ))}
               </div>
-
               <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Submit
-              </Button>
+                    variant="contained"
+                    sx={buttonSx}
+                    disabled={loading}
+                   
+                    type="submit"
+                  >
+                   Submit
+                    {loading && (
+                    <CircularProgress
+                      size={24}
+                      sx={{
+                        color: green[500],
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        marginTop: "-12px",
+                        marginLeft: "-12px",
+                      }}
+                    />
+                  )}
+                  </Button>
+                  
+
+            
             </Box>
           </Box>
 
