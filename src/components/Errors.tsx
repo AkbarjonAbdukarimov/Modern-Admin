@@ -12,7 +12,7 @@ const Errors: FunctionComponent<{ errs: IError[] | undefined }> = ({ errs }) => 
     }
     return (
 
-        <div className="Shoxrux" style={{ paddingTop: "64px" }}>
+        <div style={{ paddingTop: "64px" }}>
             <Snackbar
                 open={open}
                 autoHideDuration={8000}
