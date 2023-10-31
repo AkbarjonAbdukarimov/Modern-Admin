@@ -22,8 +22,9 @@ import IProp from "../../../../interfaces/Props/IProp";
 import IError from "../../../../interfaces/IError";
 import { green } from "@mui/material/colors";
 import IPrice from "../../../../interfaces/Product/IPrice";
+import "../../../../style/Products/NewProduct.scss"
 
-interface NewProductProps {}
+interface NewProductProps { }
 export type price = {
   id: number;
   qtyMin: number | string;
@@ -55,20 +56,20 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const timer =useRef<number>();
+  const timer = useRef<number>();
 
   const buttonSx = {
-    
+
     ...(success && {
       bgcolor: green[500],
       '&:hover': {
         bgcolor: green[700],
       },
     }),
-    width:"100%",
+    width: "100%",
   };
 
-useEffect(() => {
+  useEffect(() => {
     return () => {
       clearTimeout(timer.current);
     };
@@ -78,7 +79,7 @@ useEffect(() => {
     if (!loading) {
       setSuccess(false);
       setLoading(true);
-     
+
     }
   };
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -137,7 +138,7 @@ useEffect(() => {
   };
   return (
     <>
-      <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
+      <form onSubmit={handleSubmit} noValidate encType="multipart/form-data" className="from-new-products">
         <Container component="main">
           <CssBaseline />
 
@@ -154,7 +155,7 @@ useEffect(() => {
               New Product
             </Typography>
 
-            <Box sx={{ mt: 1, width: "50ch" }}>
+            <Box sx={{ mt: 1, width: "50ch" }} className="wrapper">
               <TextField
                 margin="normal"
                 required
@@ -162,6 +163,7 @@ useEffect(() => {
                 id="name"
                 label="Product Name"
                 name="name"
+                className="prodes"
               />
               <TextField
                 margin="normal"
@@ -171,6 +173,7 @@ useEffect(() => {
                 label="Description"
                 type="description"
                 id="description"
+                className="prodes mb-5"
               />
               <div className="mb-3">
                 <label htmlFor="formFileSm" className="form-label">
@@ -185,7 +188,7 @@ useEffect(() => {
                 />
               </div>
 
-              <div className="mb-3">
+              <div className="mb-3 category">
                 {categories && (
                   <SelectInput
                     //@ts-ignore
@@ -193,6 +196,7 @@ useEffect(() => {
                     setSelected={setSelectedCat}
                     requestPath="/categories"
                     label="Categories"
+
                   />
                 )}
               </div>
@@ -225,7 +229,7 @@ useEffect(() => {
                   />
                 ))}
               </div>
-              <div className="mb-3">
+              <div className="mb-3 prices">
                 {prices.map((p) => (
                   //@ts-ignore
 
@@ -238,30 +242,30 @@ useEffect(() => {
                 ))}
               </div>
               <Button
-                    variant="contained"
-                    sx={buttonSx}
-                    disabled={loading}
-                   
-                    type="submit"
-                  >
-                   Submit
-                    {loading && (
-                    <CircularProgress
-                      size={24}
-                      sx={{
-                        color: green[500],
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        marginTop: "-12px",
-                        marginLeft: "-12px",
-                      }}
-                    />
-                  )}
-                  </Button>
-                  
+                variant="contained"
+                sx={buttonSx}
+                disabled={loading}
+                className="submit"
+                type="submit"
+              >
+                Submit
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      color: green[500],
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      marginTop: "-12px",
+                      marginLeft: "-12px",
+                    }}
+                  />
+                )}
+              </Button>
 
-            
+
+
             </Box>
           </Box>
 

@@ -14,7 +14,7 @@ export default function Orders() {
     getOrders
   );
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70 },
+    { field: "id", headerName: "ID", width: 100 },
     { field: "orderStatus", headerName: "Order Status", width: 100 },
     {
       field: "createdAt",
@@ -27,8 +27,11 @@ export default function Orders() {
       field: "total",
       headerName: "Total Price",
       width: 130,
-      valueGetter: (params) =>
-        params.row.total.toLocaleString(),
+      renderCell: (params) => (
+        <span className="price-list-order">
+          {params.row.total.toLocaleString()}
+        </span>
+      )
     },
 
     // {

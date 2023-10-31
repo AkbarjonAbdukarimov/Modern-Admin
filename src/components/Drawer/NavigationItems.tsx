@@ -34,6 +34,7 @@ export default function NavigationItems({ toggleDrawer, navlinks }: IProps) {
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
+      style={{ background: "#1d1e42", minHeight: "100svh" }}
     >
       {navlinks && navlinks.length > 0 && (
         <List className="list__nav">
