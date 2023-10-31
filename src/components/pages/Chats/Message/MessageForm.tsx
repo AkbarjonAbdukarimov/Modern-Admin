@@ -2,6 +2,7 @@ import { useState } from "react";
 import IChat from "../../../../interfaces/IChat";
 import { socket } from "../../../../socket";
 import IAdmin from "../../../../interfaces/IAdmin";
+import "../../../../style/chats/chat.scss"
 
 export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
   const [message, setMesage] = useState("");
@@ -40,7 +41,7 @@ export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
       encType=""
       //@ts-ignore
       onSubmit={handleSubmit}
-      className=" d-flex justify-content-evenly my-2"
+      className=" d-flex justify-content-evenly my-2 chatInpWrapper"
     >
       <input
         value={message}
@@ -48,6 +49,7 @@ export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
           setMesage(e.target.value);
         }}
         className="form-control mx-1"
+        placeholder="Write here..."
         type="text"
         name="message"
         id=""

@@ -46,7 +46,7 @@ const queryClient = new QueryClient();
 export default function App() {
   const [admin, setAdmin] = useState<IAdmin | undefined>();
   const [selectedChat, setSelectedChat] = useState<IChat>();
-  
+
   axios.defaults.baseURL = backend + "api";
 
   axios.defaults.headers.common["Authorization"] = admin?.token;
@@ -54,10 +54,10 @@ export default function App() {
   useEffect(() => {
     const a = localStorage.getItem("admin");
     if (a !== "undefined" && a) {
-      const parsed=JSON.parse(a)
+      const parsed = JSON.parse(a)
       setAdmin(parsed);
       socket.connect();
-    
+
       socket.emit("newUser", parsed);
     }
   }, []);
@@ -83,11 +83,11 @@ export default function App() {
                   <Route path="/orders" element={<Orders />} />
                   <Route path="/chats" element={<Chat />} />
                   <Route
-                      path="/chats/:chatId"
-                      element={
-                        <MessagingArea chat={selectedChat} user={admin} />
-                      }
-                    />
+                    path="/chats/:chatId"
+                    element={
+                      <MessagingArea chat={selectedChat} user={admin} />
+                    }
+                  />
                   {admin.super ? (
                     <>
                       <Route path="/admins" element={<Admins />}></Route>

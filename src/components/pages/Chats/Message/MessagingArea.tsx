@@ -8,6 +8,8 @@ import IAdmin from "../../../../interfaces/IAdmin";
 import IChat from "../../../../interfaces/IChat";
 import ListLoading from "../../../ListLoading";
 import { useNavigate } from "react-router-dom";
+import "../../../../style/chats/chat.scss"
+
 const Renavigate = () => {
   const navigate = useNavigate();
   useEffect(() => {
@@ -26,6 +28,7 @@ export default function MessagingArea({
 }) {
   const [loading, setLoading] = useState(true);
 
+
   if (!chat) {
     return <Renavigate />;
   }
@@ -37,7 +40,7 @@ export default function MessagingArea({
     setLoading(true)
     axios
       .get<IMessage[]>("/chats/admin/" + chat.id)
-      .then((res) => {setLoading(false);setMessages(res.data)});
+      .then((res) => { setLoading(false); setMessages(res.data) });
   }, [chat]);
   //scroling logic
   useEffect(() => {
@@ -64,12 +67,12 @@ export default function MessagingArea({
         <div
           style={{
             width: "98%",
-            maxHeight: "80vh",
+            maxHeight: "86vh",
             overflowY: "scroll",
             position: "absolute",
             bottom: 50,
           }}
-          className="h-100 d-flex justify-content-center align-items-center"
+          className="h-100 d-flex justify-content-center align-items-center loading"
         >
           <ListLoading />
         </div>
@@ -83,12 +86,12 @@ export default function MessagingArea({
           <div
             style={{
               width: "98%",
-              maxHeight: "80vh",
+              maxHeight: "86vh",
               overflowY: "scroll",
               position: "absolute",
               bottom: 50,
             }}
-            className=" p-0 ms-4"
+            className={`p-0 ms-4 selectedChat`}
           >
             {messages.map((m) => (
               <Message key={m.id} message={m} user={user} />
@@ -98,7 +101,7 @@ export default function MessagingArea({
           <div
             style={{
               width: "98%",
-              maxHeight: "80vh",
+              maxHeight: "86vh",
               overflowY: "scroll",
               position: "absolute",
               bottom: 50,

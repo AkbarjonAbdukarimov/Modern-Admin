@@ -15,6 +15,7 @@ import { useQuery } from "react-query";
 import ChatItems from "./ChatItem/ChatItem";
 import { Link } from "react-router-dom";
 import ListLoading from "../../ListLoading";
+import "../../../style/chats/chat.scss"
 const drawerWidth = 200;
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -35,7 +36,7 @@ const ChatListDrawer = ({
 }: {
   open: boolean;
   handleDrawerClose: Function;
-  selectedChat: IChat|undefined;
+  selectedChat: IChat | undefined;
   setSelectedChat: Function;
 }) => {
   const { data, isLoading } = useQuery(["chats"], getChats);
@@ -54,8 +55,9 @@ const ChatListDrawer = ({
       variant="persistent"
       anchor="right"
       open={open}
+      className="chatWrapper"
     >
-      <DrawerHeader>
+      <DrawerHeader >
         <IconButton onClick={() => handleDrawerClose()}>
           {theme.direction === "rtl" ? (
             <ChevronLeftIcon />
