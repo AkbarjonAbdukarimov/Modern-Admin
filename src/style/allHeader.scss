@@ -14,3 +14,15 @@
 ::-webkit-scrollbar-track {
   background: #1d1e42;
 }
+
+button.MuiFab-root {
+  background: #512ddd;
+
+  &:hover{
+    background: #613eea;
+  }
+}
+
+button.MuiButtonBase-root {
+  color: white;
+}
