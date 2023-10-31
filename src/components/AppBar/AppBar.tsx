@@ -51,21 +51,21 @@ export default function CustomAppBar({
 }: {
   navLinks: INavProps[];
   setUser: Function;
-  selectedChat: IChat|undefined;
+  selectedChat: IChat | undefined;
   setSelectedChat: Function;
 }) {
   const { pathname } = useLocation();
-
   const chatPath = pathname.split("/")[1] || undefined;
   const [open, setOpen] = React.useState(chatPath != "/chats" ? false : true);
   const navigate = useNavigate();
   const [unreadMsgs, setCount] = React.useState(0);
+
   useEffect(() => {
     axios
       .get("/chats/admin/msgcount")
-      .then((res) => {setCount(res.data.unreadMsgs)})
+      .then((res) => { setCount(res.data.unreadMsgs) })
       .catch((e) => console.log(e));
-     
+
   }, []);
   useEffect(() => {
     if (chatPath === "chats") {
@@ -74,6 +74,7 @@ export default function CustomAppBar({
       setOpen(false);
     }
   }, [chatPath]);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -137,7 +138,7 @@ export default function CustomAppBar({
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
-      
+
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
         vertical: "top",
@@ -163,9 +164,9 @@ export default function CustomAppBar({
                 alignItems: "center",
               }}
               to={"/chats"}
-              onClick={()=>setCount(0)}
+              onClick={() => setCount(0)}
             >
-             <MessagesButton msgs={unreadMsgs}/>
+              <MessagesButton msgs={unreadMsgs} />
               <p className="m-0">Messages</p>
             </Link>
           </MenuItem>
@@ -188,7 +189,7 @@ export default function CustomAppBar({
   );
 
   return (
-    <Box sx={{ display: "flex"}} >
+    <Box sx={{ display: "flex" }} >
       <CssBaseline />
       <AppBar position="fixed" open={open} className="allHeader">
         <Toolbar>
@@ -203,9 +204,9 @@ export default function CustomAppBar({
               <Link
                 style={{ textDecoration: "none", color: "white" }}
                 to={"/chats"}
-                onClick={()=>setCount(0)}
+                onClick={() => setCount(0)}
               >
-               <MessagesButton msgs={unreadMsgs}/>
+                <MessagesButton msgs={unreadMsgs} />
               </Link>
             )}
 

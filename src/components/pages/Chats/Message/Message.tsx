@@ -7,6 +7,8 @@ import { IMessage } from "../../../../interfaces/IMessage";
 import { socket } from "../../../../socket";
 import IAdmin from "../../../../interfaces/IAdmin";
 import { backend } from "../../../../URLS";
+import "../../../../style/chats/chat.scss"
+
 const muted = grey["400"];
 const Message = ({ message, user }: { message: IMessage; user: IAdmin }) => {
   const image: string[] = ["jpg", "png", "jpeg"];
@@ -15,14 +17,14 @@ const Message = ({ message, user }: { message: IMessage; user: IAdmin }) => {
   const [viewed, setViewed] = useState<boolean>(message.viewed);
 
   function sendMessage(msg: IMessage) {
-    
+
     if (msg.sender === user.id) {
       setViewed(msg.viewed);
     }
   }
 
   useEffect(() => {
-    
+
     socket.on(String(message.id), sendMessage);
     return () => {
       socket.off(String(message.id), sendMessage);
@@ -30,7 +32,7 @@ const Message = ({ message, user }: { message: IMessage; user: IAdmin }) => {
   }, [setViewed]);
   useEffect(() => {
     if (message.sender != user.id && message.viewed === false) {
-     
+
       socket.emit("messageViewed", { ...message, msg: "from admin" });
     }
   }, []);
@@ -53,8 +55,8 @@ const Message = ({ message, user }: { message: IMessage; user: IAdmin }) => {
                 src={serverURL + "/" + message.file}
               />
             ) : video.find(
-                (i) => i === message.file.split(".")[1].toLowerCase()
-              ) ? (
+              (i) => i === message.file.split(".")[1].toLowerCase()
+            ) ? (
               <>
                 <video controls className="" style={{ width: 200 }}>
                   <source src={serverURL + "/" + message.file} />
