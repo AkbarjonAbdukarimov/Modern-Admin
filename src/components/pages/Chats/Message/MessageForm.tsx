@@ -2,10 +2,14 @@ import { useState } from "react";
 import IChat from "../../../../interfaces/IChat";
 import { socket } from "../../../../socket";
 import IAdmin from "../../../../interfaces/IAdmin";
+import { useAppSelector } from "../../../../store/store";
 import "../../../../style/chats/chat.scss"
 
 export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
   const [message, setMesage] = useState("");
+  const chatPosition = useAppSelector(
+    (state) => state.chatPosition.chatPosition
+  );
 
   const handleSubmit = (e: HTMLFormElement) => {
     e.preventDefault();
@@ -41,7 +45,7 @@ export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
       encType=""
       //@ts-ignore
       onSubmit={handleSubmit}
-      className=" d-flex justify-content-evenly my-2 chatInpWrapper"
+      className={`d-flex justify-content-evenly my-2 chatInpWrapper ${chatPosition ? "active" : ""}`}
     >
       <input
         value={message}

@@ -13,9 +13,14 @@
 }
 
 .chatInpWrapper {
-  width: 80%;
+  width: 60%;
   justify-content: center !important;
-  gap: 5px;
+  transition: 0.3s;
+
+  &.active {
+    margin-right: 200px;
+    transition: 0.2s;
+  }
 
   input {
     width: 50%;
@@ -53,6 +58,9 @@
 }
 
 .selectedChat {
+  padding: 20px 10px 80px 0 !important;
+  transition: 0.3s;
+
   .message-content {
     background: #512ddd !important;
     color: white;
@@ -63,7 +71,20 @@
     color: #512ddd !important;
   }
 
-  &.open{
-    padding-right: 192px!important;
+  &.open {
+    padding-right: 192px !important;
   }
+
+  &.active {
+    padding-right: 200px !important;
+    transition: 0.2s;
+  }
+}
+
+.rightMW {
+  width: auto !important;
+}
+
+::-webkit-scrollbar {
+  height: 0;
 }

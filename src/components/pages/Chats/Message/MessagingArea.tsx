@@ -8,7 +8,8 @@ import IAdmin from "../../../../interfaces/IAdmin";
 import IChat from "../../../../interfaces/IChat";
 import ListLoading from "../../../ListLoading";
 import { useNavigate } from "react-router-dom";
-import "../../../../style/chats/chat.scss"
+import "../../../../style/chats/chat.scss";
+import { useAppSelector } from "../../../../store/store";
 
 const Renavigate = () => {
   const navigate = useNavigate();
@@ -27,7 +28,10 @@ export default function MessagingArea({
   chat: IChat | undefined;
 }) {
   const [loading, setLoading] = useState(true);
-
+  const chatPosition = useAppSelector(
+    (state) => state.chatPosition.chatPosition
+  );
+  
 
   if (!chat) {
     return <Renavigate />;
@@ -37,10 +41,11 @@ export default function MessagingArea({
 
   const endRef = useRef<HTMLDivElement | any>();
   useEffect(() => {
-    setLoading(true)
-    axios
-      .get<IMessage[]>("/chats/admin/" + chat.id)
-      .then((res) => { setLoading(false); setMessages(res.data) });
+    setLoading(true);
+    axios.get<IMessage[]>("/chats/admin/" + chat.id).then((res) => {
+      setLoading(false);
+      setMessages(res.data);
+    });
   }, [chat]);
   //scroling logic
   useEffect(() => {
@@ -66,11 +71,11 @@ export default function MessagingArea({
       <div className="row w-100 p-0">
         <div
           style={{
-            width: "98%",
-            maxHeight: "86vh",
+            width: "99%",
+            maxHeight: "91.5vh",
             overflowY: "scroll",
             position: "absolute",
-            bottom: 50,
+            bottom: 0,
           }}
           className="h-100 d-flex justify-content-center align-items-center loading"
         >
@@ -85,13 +90,13 @@ export default function MessagingArea({
         {messages && messages.length > 0 ? (
           <div
             style={{
-              width: "98%",
-              maxHeight: "86vh",
+              width: "99%",
+              maxHeight: "91.5vh",
               overflowY: "scroll",
               position: "absolute",
-              bottom: 50,
+              bottom: 0,
             }}
-            className={`p-0 ms-4 selectedChat`}
+            className={`ms-4 selectedChat ${chatPosition ? "active" : ""}`}
           >
             {messages.map((m) => (
               <Message key={m.id} message={m} user={user} />
@@ -100,11 +105,11 @@ export default function MessagingArea({
         ) : (
           <div
             style={{
-              width: "98%",
-              maxHeight: "86vh",
+              width: "99%",
+              maxHeight: "91.5vh",
               overflowY: "scroll",
               position: "absolute",
-              bottom: 50,
+              bottom: 0,
             }}
             className="h-100 d-flex justify-content-center align-items-center"
           >

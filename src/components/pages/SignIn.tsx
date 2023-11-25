@@ -16,6 +16,7 @@ import axios, { AxiosError } from 'axios';
 import AdminContext from '../../context/AdminContext';
 import Errors from '../Errors';
 import IError from '../../interfaces/IError';
+import "../../style/SignIn.scss"
 
 const defaultTheme = createTheme();
 
@@ -60,7 +61,7 @@ export default function SignIn() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
+            <Container component="main" maxWidth="xs" className='wrapper'>
 
                 <CssBaseline />
                 <Box

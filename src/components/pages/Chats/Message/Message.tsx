@@ -9,6 +9,7 @@ import IAdmin from "../../../../interfaces/IAdmin";
 import { backend } from "../../../../URLS";
 import "../../../../style/chats/chat.scss"
 
+
 const muted = grey["400"];
 const Message = ({ message, user }: { message: IMessage; user: IAdmin }) => {
   const image: string[] = ["jpg", "png", "jpeg"];
@@ -45,7 +46,7 @@ const Message = ({ message, user }: { message: IMessage; user: IAdmin }) => {
           <div className="message-content">{message.message}</div>
         )}
         {message.file && (
-          <div className={"" + (user.id === message.sender ? "right" : "left")}>
+          <div className={"" + (user.id === message.sender ? "right rightMW" : "left")}>
             {image.find(
               (i) => i === message.file.split(".")[1].toLowerCase()
             ) ? (

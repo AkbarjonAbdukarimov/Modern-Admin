@@ -2,6 +2,12 @@
   background-color: #512ddd !important;
 }
 
+.header-wrapper{
+  &.active{
+    padding-right: 115px;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 0.4em;
 }
