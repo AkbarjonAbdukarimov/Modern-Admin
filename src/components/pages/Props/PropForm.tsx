@@ -42,7 +42,7 @@ const PropForm: React.FC<IPropForm> = ({ requestPath, formType, propId }) => {
                 return
             }
            
-            setError([{...error, message:error.message}])
+            setError([{ message:error.message}])
         }
 
     }

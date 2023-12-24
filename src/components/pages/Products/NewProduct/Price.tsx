@@ -12,8 +12,8 @@ interface IPriceProps {
   prices: IPrice[];
 }
 export default function Price({ setPrice, price, prices }: IPriceProps) {
-  const [qtyMin, setMin] = useState(price.qtyMin);
-  const [qtyMax, setMax] = useState(price.qtyMax);
+  const [qtyMin, setMin] = useState(price.qtyMin===0?1:price.qtyMin);
+  const [qtyMax, setMax] = useState(price.qtyMax===0?1:price.qtyMax);
   const [pr, setPr] = useState(price.price);
   const [oldPr, setOldpr] = useState(price.oldPrice);
   const [isEditing, setEditing] = useState(true);
@@ -79,7 +79,7 @@ export default function Price({ setPrice, price, prices }: IPriceProps) {
           //@ts-ignore
           onChange={(e) => setMin(e.target.value)}
           value={qtyMin}
-          name={"qtyMin"}
+          name="price[qtyMin]"
           id={price.id + "qtyMin"}
         />
       </FormControl>{" "}

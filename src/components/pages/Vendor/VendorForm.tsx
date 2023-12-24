@@ -41,7 +41,14 @@ const VendorForm: React.FunctionComponent<IVendorFormProps> = ({
           setPhone(res.data.contacts.phoneNumber.toString());
           setImg(res.data.baner);
         })
-        .catch((e) => setError([...e.response.data.errors]));
+        .catch((e) => {
+          if (e instanceof AxiosError) {
+            setError([...e.response!.data.errors]);
+            return
+          }
+          setError([{message:error.message}])
+
+        });
     }
   }, []);
   async function handleSubmit(

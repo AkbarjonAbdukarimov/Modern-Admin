@@ -88,7 +88,9 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
         const { errors } = error.response!.data;
 
         setError([...errors]);
+        return;
       }
+      setError([{message:error.message}])
     }
   }
   if (allProps.isLoading) {

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import ICategory from "../../../../interfaces/ICategory";
 import { v4 as uuid } from "uuid";
 import {
@@ -126,7 +126,15 @@ export default function EditProduct() {
         setOldProps(data.props);
         setProduct(data);
       })
-      .catch((e) => setError([...e.response.date.errors]));
+      .catch((error) => {
+        if (error instanceof AxiosError) {
+          const { errors } = error.response!.data;
+  
+          setError([...errors]);
+          return;
+        }
+        setError([{message:error.message}])
+      });
   }, []);
   useEffect(() => {
     if (selectedSubct) {

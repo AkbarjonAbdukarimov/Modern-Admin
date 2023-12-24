@@ -22,6 +22,7 @@ import IProp from "../../../../interfaces/Props/IProp";
 import IError from "../../../../interfaces/IError";
 import { green } from "@mui/material/colors";
 import IPrice from "../../../../interfaces/Product/IPrice";
+import InputFileUpload from "../../../UploadButton/InputFileUpload";
 
 interface NewProductProps {}
 export type price = {
@@ -55,20 +56,19 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const timer =useRef<number>();
+  const timer = useRef<number>();
 
   const buttonSx = {
-    
     ...(success && {
       bgcolor: green[500],
-      '&:hover': {
+      "&:hover": {
         bgcolor: green[700],
       },
     }),
-    width:"100%",
+    width: "100%",
   };
 
-useEffect(() => {
+  useEffect(() => {
     return () => {
       clearTimeout(timer.current);
     };
@@ -78,12 +78,11 @@ useEffect(() => {
     if (!loading) {
       setSuccess(false);
       setLoading(true);
-     
     }
   };
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    handleButtonClick()
+    handleButtonClick();
     //@ts-ignore
     const data = new FormData(e.target);
     selectedCat && data.append("category", selectedCat.id);
@@ -103,6 +102,7 @@ useEffect(() => {
         })
       );
     });
+    // console.log([...data.entries()])
     axios
       .post("/products/new", data)
       .then((_res) => {
@@ -113,12 +113,14 @@ useEffect(() => {
         navigate("/products");
       })
       .catch((e) => {
-        setLoading(false)
-        setSuccess(false)
+        setLoading(false);
+        setSuccess(false);
         if (e instanceof AxiosError) {
           let err: IError[] = e.response!.data.errors;
           setError([...err]);
+          return;
         }
+        setError([{ message: e.message }]);
       });
   }
   useEffect(() => {
@@ -196,7 +198,9 @@ useEffect(() => {
                   />
                 )}
               </div>
-
+              {/* <InputFileUpload />
+              <br />
+              <InputFileUpload /> */}
               <div className="mb-3">
                 {selectedCat && (
                   <SelectInput
@@ -238,30 +242,26 @@ useEffect(() => {
                 ))}
               </div>
               <Button
-                    variant="contained"
-                    sx={buttonSx}
-                    disabled={loading}
-                   
-                    type="submit"
-                  >
-                   Submit
-                    {loading && (
-                    <CircularProgress
-                      size={24}
-                      sx={{
-                        color: green[500],
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        marginTop: "-12px",
-                        marginLeft: "-12px",
-                      }}
-                    />
-                  )}
-                  </Button>
-                  
-
-            
+                variant="contained"
+                sx={buttonSx}
+                disabled={loading}
+                type="submit"
+              >
+                Submit
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      color: green[500],
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      marginTop: "-12px",
+                      marginLeft: "-12px",
+                    }}
+                  />
+                )}
+              </Button>
             </Box>
           </Box>
 

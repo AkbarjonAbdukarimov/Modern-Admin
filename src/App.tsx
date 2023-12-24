@@ -65,7 +65,7 @@ export default function App() {
   return (
     <AdminContext.Provider value={{ admin, setAdmin }}>
       <QueryClientProvider client={queryClient}>
-        <div>
+        <div className="mt-5 pt-5">
           {!admin ? (
             <SignIn />
           ) : (
