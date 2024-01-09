@@ -43,16 +43,15 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
   const [err, setError] = useState<IError[] | undefined>();
 
   const [name, setName] = useState("");
- // const [removedProps, setRemovedProps] = useState([]);
+  // const [removedProps, setRemovedProps] = useState([]);
   const [subctProps, setSubctProps] = useState<ISubcategory["props"]>();
-  const [newProps, setNewProps] = useState<IPropValue[] >([]);
+  const [newProps, setNewProps] = useState<IPropValue[]>([]);
   const navigate = useNavigate();
 
-  const handlePropSelection = (prop: IProp|null) => {
+  const handlePropSelection = (prop: IProp | null) => {
     //@ts-ignore
-    prop&&setNewProps((prev) => [...prev, prop]);
+    prop && setNewProps((prev) => [...prev, prop]);
   };
-  
 
   useEffect(() => {
     if (id) {
@@ -74,23 +73,23 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
         name,
         newProps,
         subctProps,
-        category:categoryId
+        category: categoryId,
       };
-      
+
       await axios({
         url: requestPath,
         data,
         method: formType === "edit" ? "put" : "post",
       });
-       navigate("/categories/");
-    } catch (error) {
+      navigate("/categories/");
+    } catch (error: any) {
       if (error instanceof AxiosError) {
         const { errors } = error.response!.data;
 
         setError([...errors]);
         return;
       }
-      setError([{message:error.message}])
+      setError([{ message: error.message }]);
     }
   }
   if (allProps.isLoading) {
@@ -130,7 +129,7 @@ const SubcategoryForm: React.FC<ISubcategoryForm> = ({
                 {props && (
                   <SelectInput
                     setSelected={handlePropSelection}
-                    data={props.data||[]}
+                    data={props.data || []}
                     label="Properties"
                   />
                 )}

@@ -7,7 +7,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Price from "./Price";
 import SelectInput from "../../../CustomSelectInput";
 import axios, { AxiosError } from "axios";
@@ -23,6 +29,7 @@ import IError from "../../../../interfaces/IError";
 import { green } from "@mui/material/colors";
 import IPrice from "../../../../interfaces/Product/IPrice";
 import InputFileUpload from "../../../UploadButton/InputFileUpload";
+import AdminContext from "../../../../context/AdminContext";
 
 interface NewProductProps {}
 export type price = {
@@ -51,7 +58,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
   const [props, setProps] = useState<ISubcategory>();
   const [selectedProps, selectProps] = useState<IPropValue[]>([]);
   const [err, setError] = useState<IError[] | undefined>();
-
+  const ctx = useContext(AdminContext);
   const categories = useQuery(["categories-product"], getCategories);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -102,7 +109,6 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
         })
       );
     });
-    // console.log([...data.entries()])
     axios
       .post("/products/new", data)
       .then((_res) => {
@@ -138,7 +144,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
     prop && selectProps((prev) => [...prev, prop]);
   };
   return (
-    <>
+    <div className="my-4 py-3">
       <form onSubmit={handleSubmit} noValidate encType="multipart/form-data">
         <Container component="main">
           <CssBaseline />
@@ -187,48 +193,50 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
                 />
               </div>
 
-              <div className="mb-3">
-                {categories && (
-                  <SelectInput
-                    //@ts-ignore
-                    data={categories.data}
-                    setSelected={setSelectedCat}
-                    requestPath="/categories"
-                    label="Categories"
-                  />
-                )}
-              </div>
-              {/* <InputFileUpload />
-              <br />
-              <InputFileUpload /> */}
-              <div className="mb-3">
-                {selectedCat && (
-                  <SelectInput
-                    setSelected={setSelectedSubct}
-                    data={selectedCat.subcategories}
-                    label="Subcategories"
-                  />
-                )}
-              </div>
-              <div className="mb-3">
-                {selectedSubct && props && (
-                  <SelectInput
-                    setSelected={handlePropSelection}
-                    data={props.props}
-                    label="Properties"
-                  />
-                )}
-              </div>
-              <div className="mb-3">
-                {selectedProps.map((p) => (
-                  <Prop
-                    displayItems={2}
-                    key={p.id}
-                    prop={p}
-                    setProps={selectProps}
-                  />
-                ))}
-              </div>
+              {ctx && ctx.admin && ctx.admin.super && (
+                <>
+                  <div className="mb-3">
+                    {categories && (
+                      <SelectInput
+                        //@ts-ignore
+                        data={categories.data}
+                        setSelected={setSelectedCat}
+                        requestPath="/categories"
+                        label="Categories"
+                      />
+                    )}
+                  </div>
+
+                  <div className="mb-3">
+                    {selectedCat && (
+                      <SelectInput
+                        setSelected={setSelectedSubct}
+                        data={selectedCat.subcategories}
+                        label="Subcategories"
+                      />
+                    )}
+                  </div>
+                  <div className="mb-3">
+                    {selectedSubct && props && (
+                      <SelectInput
+                        setSelected={handlePropSelection}
+                        data={props.props}
+                        label="Properties"
+                      />
+                    )}
+                  </div>
+                  <div className="mb-3">
+                    {selectedProps.map((p) => (
+                      <Prop
+                        displayItems={2}
+                        key={p.id}
+                        prop={p}
+                        setProps={selectProps}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
               <div className="mb-3">
                 {prices.map((p) => (
                   //@ts-ignore
@@ -240,6 +248,36 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
                     price={p}
                   />
                 ))}
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
               </div>
               <Button
                 variant="contained"
@@ -268,7 +306,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
           <Errors errs={err} />
         </Container>
       </form>
-    </>
+    </div>
   );
 };
 

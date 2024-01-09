@@ -44,10 +44,9 @@ const VendorForm: React.FunctionComponent<IVendorFormProps> = ({
         .catch((e) => {
           if (e instanceof AxiosError) {
             setError([...e.response!.data.errors]);
-            return
+            return;
           }
-          setError([{message:error.message}])
-
+          setError([{ message: e.message }]);
         });
     }
   }, []);

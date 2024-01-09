@@ -13,8 +13,8 @@ import {
   IconButton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import RemoveIcon from '@mui/icons-material/Remove';
-import { useState, useEffect } from "react";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { useState, useEffect, useContext } from "react";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import ISubcategory from "../../../../interfaces/ISubcategory";
@@ -30,6 +30,8 @@ import CustomSelectInput from "../../../CustomSelectInput";
 import "./EditProduct.css";
 import IProductMedia from "../../../../interfaces/Product/IProducMedia";
 import IError from "../../../../interfaces/IError";
+import InputFileUpload from "../../../UploadButton/InputFileUpload";
+import AdminContext from "../../../../context/AdminContext";
 export type price = {
   id: number;
   qtyMin: number;
@@ -66,10 +68,10 @@ export default function EditProduct() {
   const [delFiles, setDelFiles] = useState<IProductMedia[] | undefined>();
   const categories = useQuery(["categories-product"], getCategories);
   const navigate = useNavigate();
-
+  const ctx = useContext(AdminContext);
   function handleSubmit(e: HTMLFormElement) {
     e.preventDefault();
-//@ts-ignore
+    //@ts-ignore
     const data = new FormData(e.target);
     selectedCat && data.append("category", selectedCat.id);
     selectedSubct && data.append("subcategory", selectedSubct.id);
@@ -94,16 +96,21 @@ export default function EditProduct() {
     axios
       .put("/products/edit/" + id, data)
       .then((res) => {
-        navigate("/products/" + res.data.id);
+        console.log(res.data);
+        navigate("/products");
       })
       .catch((e) => {
-
         setError([...e.response.data.errors]);
       });
   }
   useEffect(() => {
     axios
-      .get<IProduct>(`/products/${id}`, { params: { admin: true } })
+      .get<IProduct>(
+        !ctx?.admin?.super ? `/products/vendor/${id}` : `/products/${id}`,
+        {
+          params: { admin: true },
+        }
+      )
       .then((res) => {
         const { data } = res;
         // if (data && !admin.super ||data.author.id != admin.id) {
@@ -129,11 +136,11 @@ export default function EditProduct() {
       .catch((error) => {
         if (error instanceof AxiosError) {
           const { errors } = error.response!.data;
-  
+
           setError([...errors]);
           return;
         }
-        setError([{message:error.message}])
+        setError([{ message: error.message }]);
       });
   }, []);
   useEffect(() => {
@@ -155,10 +162,12 @@ export default function EditProduct() {
 
   return (
     <>
-   
       <form
-       //@ts-ignore
-       onSubmit={handleSubmit} noValidate encType="multipart/form-data">
+        //@ts-ignore
+        onSubmit={handleSubmit}
+        noValidate
+        encType="multipart/form-data"
+      >
         <Container component="main">
           <CssBaseline />
 
@@ -175,7 +184,7 @@ export default function EditProduct() {
               Edit Product
             </Typography>
 
-            <Box sx={{ mt: 1, width: "80%" }}>
+            <Box sx={{ mt: 1, width: "50ch" }}>
               <TextField
                 margin="normal"
                 required
@@ -248,9 +257,11 @@ export default function EditProduct() {
                 <div className="d-flex flex-column flex-md-row align-items-center justify-content-evenly">
                   {product.media.length > 0 &&
                     product.media.map((m) => (
-                      <div key={m.fileId} className="d-flex flex-column align-items-center">
+                      <div
+                        key={m.fileId}
+                        className="d-flex flex-column align-items-center"
+                      >
                         <CardMedia
-                         
                           component="img"
                           style={{ maxWidth: "200px" }}
                           height="194"
@@ -262,11 +273,9 @@ export default function EditProduct() {
                             onClick={() => {
                               if (delFiles) {
                                 setDelFiles([...delFiles, m]);
-                              return
+                                return;
                               }
-                              setDelFiles([m])
-
-
+                              setDelFiles([m]);
                             }}
                           >
                             <DeleteIcon />
@@ -276,113 +285,117 @@ export default function EditProduct() {
                     ))}
                 </div>
               </div>
-              <div className="mb-3">
-                <label htmlFor="formFileSm" className="form-label">
-                  Current Category : {oldSelectedCat?.name}
-                </label>
-                <br />
-                {selectedCat && (
-                  <label htmlFor="formFileSm" className="form-label">
-                    New Category : {selectedCat.name}
-                  </label>
-                )}
-              </div>
-              <div className="mb-3">
-                {categories.data && (
-                  <CustomSelectInput
-                    data={categories.data}
-                    setSelected={setSelectedCat}
-                    label="Categories"
-                  />
-                )}
-              </div>
-              <div className="mb-3">
-                <label htmlFor="formFileSm" className="form-label">
-                  Current Subcategory : {oldSubct?.name}
-                </label>
-                <br />
-                {selectedSubct && (
-                  <label htmlFor="formFileSm" className="form-label">
-                    New Category : {selectedSubct.name}
-                  </label>
-                )}
-              </div>
-              <div className="mb-3">
-                {selectedCat && (
-                  <CustomSelectInput
-                    setSelected={setSelectedSubct}
-                    data={selectedCat.subcategories}
-                    label="Subcategories"
-                  />
-                )}
-              </div>
-              <div className="mb-3">
-                {selectedSubct && props && (
-                  <CustomSelectInput
-                    setSelected={handlePropSelection}
-                    data={props.props}
-                    label="Properties"
-                  />
-                )}
-              </div>
-              <div className="d-flex flex-column flex-md-row justify-content-evenly w-100 flex-grow">
-                {oldProps && (
-                  <div className="w-md-50 w-100 m-1">
-                    <h4>Existing Props</h4>
-
-                    <div className="d-flex justify-content-evenly bg-secondary">
-                      <FormControl sx={{ m: 1 }} variant="standard">
-                        <Typography component="h1" variant="h5">
-                          Value
-                        </Typography>
-                      </FormControl>
-                      <FormControl sx={{ m: 1 }} variant="standard">
-                        <Typography component="h1" variant="h5">
-                          Name
-                        </Typography>
-                      </FormControl>
-                    </div>
-                    <div>
-                      {oldProps.map((p) => (
-                        <Prop
-                          displayItems={2}
-                          setProps={setOldProps}
-                          key={p.id}
-                          prop={p}
-                        />
-                      ))}
-                    </div>
+              {ctx && ctx.admin && ctx.admin.super && (
+                <>
+                  <div className="mb-3">
+                    <label htmlFor="formFileSm" className="form-label">
+                      Current Category : {oldSelectedCat?.name}
+                    </label>
+                    <br />
+                    {selectedCat && (
+                      <label htmlFor="formFileSm" className="form-label">
+                        New Category : {selectedCat.name}
+                      </label>
+                    )}
                   </div>
-                )}
-                {selectedProps && (
-                  <div className="w-md-50 w-100 m-1">
-                    <h4>New Props</h4>
-
-                    <div className="d-flex justify-content-evenly bg-secondary">
-                      <FormControl sx={{ m: 1 }} variant="standard">
-                        <Typography component="h1" variant="h5">
-                          Value
-                        </Typography>
-                      </FormControl>
-                      <FormControl sx={{ m: 1 }} variant="standard">
-                        <Typography component="h1" variant="h5">
-                          Name
-                        </Typography>
-                      </FormControl>
-                    </div>
-                    <div>
-                      {selectedProps.map((p) => (
-                        <Prop
-                          displayItems={2}
-                          key={p.id}
-                          prop={p}
-                          setProps={selectProps}
-                        />
-                      ))}
-                    </div>
+                  <div className="mb-3">
+                    {categories.data && (
+                      <CustomSelectInput
+                        data={categories.data}
+                        setSelected={setSelectedCat}
+                        label="Categories"
+                      />
+                    )}
                   </div>
-                )}
-              </div>
+                  <div className="mb-3">
+                    <label htmlFor="formFileSm" className="form-label">
+                      Current Subcategory : {oldSubct?.name}
+                    </label>
+                    <br />
+                    {selectedSubct && (
+                      <label htmlFor="formFileSm" className="form-label">
+                        New Category : {selectedSubct.name}
+                      </label>
+                    )}
+                  </div>
+                  <div className="mb-3">
+                    {selectedCat && (
+                      <CustomSelectInput
+                        setSelected={setSelectedSubct}
+                        data={selectedCat.subcategories}
+                        label="Subcategories"
+                      />
+                    )}
+                  </div>
+                  <div className="mb-3">
+                    {selectedSubct && props && (
+                      <CustomSelectInput
+                        setSelected={handlePropSelection}
+                        data={props.props}
+                        label="Properties"
+                      />
+                    )}
+                  </div>
+                  <div className="d-flex flex-column flex-md-row justify-content-evenly w-100 flex-grow">
+                    {oldProps && (
+                      <div className="w-md-50 w-100 m-1">
+                        <h4>Existing Props</h4>
+
+                        <div className="d-flex justify-content-evenly bg-secondary">
+                          <FormControl sx={{ m: 1 }} variant="standard">
+                            <Typography component="h1" variant="h5">
+                              Value
+                            </Typography>
+                          </FormControl>
+                          <FormControl sx={{ m: 1 }} variant="standard">
+                            <Typography component="h1" variant="h5">
+                              Name
+                            </Typography>
+                          </FormControl>
+                        </div>
+                        <div>
+                          {oldProps.map((p) => (
+                            <Prop
+                              displayItems={2}
+                              setProps={setOldProps}
+                              key={p.id}
+                              prop={p}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {selectedProps && (
+                      <div className="w-md-50 w-100 m-1">
+                        <h4>New Props</h4>
+
+                        <div className="d-flex justify-content-evenly bg-secondary">
+                          <FormControl sx={{ m: 1 }} variant="standard">
+                            <Typography component="h1" variant="h5">
+                              Value
+                            </Typography>
+                          </FormControl>
+                          <FormControl sx={{ m: 1 }} variant="standard">
+                            <Typography component="h1" variant="h5">
+                              Name
+                            </Typography>
+                          </FormControl>
+                        </div>
+                        <div>
+                          {selectedProps.map((p) => (
+                            <Prop
+                              displayItems={2}
+                              key={p.id}
+                              prop={p}
+                              setProps={selectProps}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
 
               <div className="mb-3">
                 {prices.map((p) => (
@@ -393,6 +406,36 @@ export default function EditProduct() {
                     prices={prices}
                   />
                 ))}
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
+              </div>
+              <div className="my-3">
+                <InputFileUpload name="media" />
               </div>
 
               <Button
