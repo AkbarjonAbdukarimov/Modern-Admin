@@ -2,7 +2,6 @@ import { useState } from "react";
 import IChat from "../../../../interfaces/IChat";
 import { socket } from "../../../../socket";
 import IAdmin from "../../../../interfaces/IAdmin";
-import "../../../../style/chats/chat.scss";
 
 export default function ({ chat, user }: { chat: IChat; user: IAdmin }) {
   const [message, setMesage] = useState("");

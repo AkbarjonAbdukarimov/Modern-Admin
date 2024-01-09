@@ -1,4 +1,3 @@
-import "../../../style/chats/chat.scss"
 export default function Chat() {
   return (
     <div

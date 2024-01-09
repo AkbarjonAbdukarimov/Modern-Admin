@@ -8,7 +8,6 @@ import IAdmin from "../../../../interfaces/IAdmin";
 import IChat from "../../../../interfaces/IChat";
 import ListLoading from "../../../ListLoading";
 import { useNavigate } from "react-router-dom";
-import "../../../../style/chats/chat.scss";
 
 const Renavigate = () => {
   const navigate = useNavigate();

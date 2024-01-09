@@ -15,7 +15,6 @@ import { useQuery } from "react-query";
 import ChatItems from "./ChatItem/ChatItem";
 import { Link } from "react-router-dom";
 import ListLoading from "../../ListLoading";
-import "../../../style/chats/chat.scss"
 const drawerWidth = 200;
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -57,7 +56,7 @@ const ChatListDrawer = ({
       open={open}
       className="chatWrapper"
     >
-      <DrawerHeader >
+      <DrawerHeader>
         <IconButton onClick={() => handleDrawerClose()}>
           {theme.direction === "rtl" ? (
             <ChevronLeftIcon />

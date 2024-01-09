@@ -18,7 +18,6 @@ import INavProps from "../../interfaces/INavProps";
 import { useEffect } from "react";
 import IChat from "../../interfaces/IChat";
 import MessagesButton from "./MessagesButton";
-import "../../style/allHeader.scss";
 
 const drawerWidth = 100;
 

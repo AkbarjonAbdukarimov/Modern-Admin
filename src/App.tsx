@@ -39,7 +39,6 @@ import { socket } from "./socket";
 import Chat from "./components/pages/Chats/Chat";
 import MessagingArea from "./components/pages/Chats/Message/MessagingArea";
 import IChat from "./interfaces/IChat";
-import "./style/tableStyle.scss";
 const queryClient = new QueryClient();
 
 export default function App() {

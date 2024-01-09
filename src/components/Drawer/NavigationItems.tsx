@@ -11,9 +11,7 @@ import INavProps from "../../interfaces/INavProps";
 import { useContext } from "react";
 import AdminContext from "../../context/AdminContext";
 import IAdmin from "../../interfaces/IAdmin";
-import IconListNav from "./IconListNav"
-import "../../style/list.scss"
-
+import IconListNav from "./IconListNav";
 
 interface IProps {
   navlinks: INavProps[];
@@ -21,11 +19,10 @@ interface IProps {
 }
 
 export default function NavigationItems({ toggleDrawer, navlinks }: IProps) {
-  const location = reactRouterDom.useLocation()
   const context = useContext(AdminContext);
   let admin: IAdmin;
   if (context && context.admin) {
-    admin = context.admin
+    admin = context.admin;
   }
   const list = () => (
     // @ts-ignore
@@ -34,16 +31,18 @@ export default function NavigationItems({ toggleDrawer, navlinks }: IProps) {
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
-      style={{ background: "#1d1e42", minHeight: "100svh" }}
     >
       {navlinks && navlinks.length > 0 && (
-        <List className="list__nav">
+        <List>
           {navlinks.map((link) => {
             if (admin.super) {
               return (
-                <reactRouterDom.Link to={link.to} style={{ textDecoration: "none", display: "inline" }}>
-                  <ListItem key={link.name} disablePadding className={`list__nav__button ${link.to === location.pathname && "active"}`}>
-                    <ListItemButton >
+                <reactRouterDom.Link
+                  to={link.to}
+                  style={{ textDecoration: "none", display: "inline" }}
+                >
+                  <ListItem key={link.name} disablePadding>
+                    <ListItemButton>
                       <IconListNav links={link.to} />
                       <ListItemText primary={link.name} />
                     </ListItemButton>
@@ -54,8 +53,11 @@ export default function NavigationItems({ toggleDrawer, navlinks }: IProps) {
             } else {
               if (!link.super) {
                 return (
-                  <reactRouterDom.Link to={link.to} style={{ textDecoration: "none", display: "inline" }}>
-                    <ListItem key={link.name} disablePadding className={`list__nav__button ${link.to === location.pathname && "active"}`}>
+                  <reactRouterDom.Link
+                    to={link.to}
+                    style={{ textDecoration: "none", display: "inline" }}
+                  >
+                    <ListItem key={link.name} disablePadding>
                       <ListItemButton>
                         <IconListNav links={link.to} />
                         <ListItemText primary={link.name} />
