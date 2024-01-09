@@ -31,7 +31,7 @@ import IPrice from "../../../../interfaces/Product/IPrice";
 import InputFileUpload from "../../../UploadButton/InputFileUpload";
 import AdminContext from "../../../../context/AdminContext";
 
-interface NewProductProps {}
+interface NewProductProps { }
 export type price = {
   id: number;
   qtyMin: number | string;
@@ -64,6 +64,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const timer = useRef<number>();
+  const timer = useRef<number>();
 
   const buttonSx = {
     ...(success && {
@@ -73,8 +74,10 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
       },
     }),
     width: "100%",
+    width: "100%",
   };
 
+  useEffect(() => {
   useEffect(() => {
     return () => {
       clearTimeout(timer.current);
@@ -162,7 +165,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
               New Product
             </Typography>
 
-            <Box sx={{ mt: 1, width: "50ch" }}>
+            <Box sx={{ mt: 1, width: "50ch" }} className="wrapper">
               <TextField
                 margin="normal"
                 required
@@ -170,6 +173,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
                 id="name"
                 label="Product Name"
                 name="name"
+                className="prodes"
               />
               <TextField
                 margin="normal"
@@ -179,6 +183,7 @@ const NewProduct: FunctionComponent<NewProductProps> = () => {
                 label="Description"
                 type="description"
                 id="description"
+                className="prodes mb-5"
               />
               <div className="mb-3">
                 <label htmlFor="formFileSm" className="form-label">

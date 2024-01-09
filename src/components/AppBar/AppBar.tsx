@@ -18,7 +18,9 @@ import INavProps from "../../interfaces/INavProps";
 import { useEffect } from "react";
 import IChat from "../../interfaces/IChat";
 import MessagesButton from "./MessagesButton";
-import "../../style/allHeader.scss"
+import "../../style/allHeader.scss";
+import { useAppDispatch, useAppSelector } from "../../store/store";
+import { closeChat, openChat } from "../../store/slices/chatPosition";
 
 const drawerWidth = 100;
 
@@ -51,22 +53,28 @@ export default function CustomAppBar({
 }: {
   navLinks: INavProps[];
   setUser: Function;
-  selectedChat: IChat|undefined;
+  selectedChat: IChat | undefined;
   setSelectedChat: Function;
 }) {
   const { pathname } = useLocation();
-
   const chatPath = pathname.split("/")[1] || undefined;
   const [open, setOpen] = React.useState(chatPath != "/chats" ? false : true);
   const navigate = useNavigate();
   const [unreadMsgs, setCount] = React.useState(0);
+
+  const chatPosition = useAppSelector(
+    (state) => state.chatPosition.chatPosition
+  );
+
   useEffect(() => {
     axios
       .get("/chats/admin/msgcount")
-      .then((res) => {setCount(res.data.unreadMsgs)})
+      .then((res) => {
+        setCount(res.data.unreadMsgs);
+      })
       .catch((e) => console.log(e));
-     
   }, []);
+
   useEffect(() => {
     if (chatPath === "chats") {
       setOpen(true);
@@ -74,6 +82,17 @@ export default function CustomAppBar({
       setOpen(false);
     }
   }, [chatPath]);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (open) {
+      dispatch(openChat());
+    } else {
+      dispatch(closeChat());
+    }
+  }, [open]);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -137,7 +156,6 @@ export default function CustomAppBar({
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
-      
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
         vertical: "top",
@@ -163,9 +181,9 @@ export default function CustomAppBar({
                 alignItems: "center",
               }}
               to={"/chats"}
-              onClick={()=>setCount(0)}
+              onClick={() => setCount(0)}
             >
-             <MessagesButton msgs={unreadMsgs}/>
+              <MessagesButton msgs={unreadMsgs} />
               <p className="m-0">Messages</p>
             </Link>
           </MenuItem>
@@ -191,7 +209,7 @@ export default function CustomAppBar({
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} className="allHeader">
-        <Toolbar>
+        <Toolbar className={`header-wrapper ${chatPosition ? "active" : ""}`}>
           <MainDrawer navlinks={navLinks} />
 
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
@@ -203,9 +221,9 @@ export default function CustomAppBar({
               <Link
                 style={{ textDecoration: "none", color: "white" }}
                 to={"/chats"}
-                onClick={()=>setCount(0)}
+                onClick={() => setCount(0)}
               >
-               <MessagesButton msgs={unreadMsgs}/>
+                <MessagesButton msgs={unreadMsgs} />
               </Link>
             )}
 

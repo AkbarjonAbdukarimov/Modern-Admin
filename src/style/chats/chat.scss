@@ -1,0 +1,90 @@
+.selectChat {
+  h1 {
+    color: white;
+  }
+}
+
+.chatWrapper > div {
+  background: #512ddd;
+
+  a {
+    color: white !important;
+  }
+}
+
+.chatInpWrapper {
+  width: 60%;
+  justify-content: center !important;
+  transition: 0.3s;
+
+  &.active {
+    margin-right: 200px;
+    transition: 0.2s;
+  }
+
+  input {
+    width: 50%;
+    background: #512ddd !important;
+    border: none !important;
+    color: white !important;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.637);
+    }
+  }
+
+  button {
+    background: #512ddd !important;
+    border: none !important;
+    color: white !important;
+  }
+
+  label {
+    background: #512ddd;
+
+    svg {
+      padding-bottom: 5px;
+
+      path {
+        stroke: white;
+        stroke-width: 2.5;
+      }
+    }
+  }
+}
+
+.loading div > span {
+  color: #512ddd;
+}
+
+.selectedChat {
+  padding: 20px 10px 80px 0 !important;
+  transition: 0.3s;
+
+  .message-content {
+    background: #512ddd !important;
+    color: white;
+  }
+
+  a.message-content {
+    background: #1d1e42 !important;
+    color: #512ddd !important;
+  }
+
+  &.open {
+    padding-right: 192px !important;
+  }
+
+  &.active {
+    padding-right: 200px !important;
+    transition: 0.2s;
+  }
+}
+
+.rightMW {
+  width: auto !important;
+}
+
+::-webkit-scrollbar {
+  height: 0;
+}

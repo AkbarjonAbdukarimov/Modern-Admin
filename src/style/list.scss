@@ -15,13 +15,13 @@ $color-primary: #512ddd;
       & > path,
       & > rect,
       & > circle {
-        fill: $color-primary;
-        stroke: $color-primary;
+        fill: white;
+        stroke: white;
       }
     }
 
     span {
-      color: $color-primary;
+      color: white;
       font-size: 16px;
       font-weight: 500;
     }
@@ -33,19 +33,6 @@ $color-primary: #512ddd;
     &.active {
       background: $color-primary;
       box-shadow: 0px 10px 30px 0px rgba(17, 38, 146, 0.1);
-
-      svg {
-        & > path,
-        & > rect,
-        & > circle {
-          fill: white;
-          stroke: white;
-        }
-      }
-
-      span {
-        color: white;
-      }
     }
   }
 }
