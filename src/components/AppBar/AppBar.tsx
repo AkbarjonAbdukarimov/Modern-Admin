@@ -19,8 +19,6 @@ import { useEffect } from "react";
 import IChat from "../../interfaces/IChat";
 import MessagesButton from "./MessagesButton";
 import "../../style/allHeader.scss";
-import { useAppDispatch, useAppSelector } from "../../store/store";
-import { closeChat, openChat } from "../../store/slices/chatPosition";
 
 const drawerWidth = 100;
 
@@ -62,10 +60,6 @@ export default function CustomAppBar({
   const navigate = useNavigate();
   const [unreadMsgs, setCount] = React.useState(0);
 
-  const chatPosition = useAppSelector(
-    (state) => state.chatPosition.chatPosition
-  );
-
   useEffect(() => {
     axios
       .get("/chats/admin/msgcount")
@@ -82,16 +76,6 @@ export default function CustomAppBar({
       setOpen(false);
     }
   }, [chatPath]);
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (open) {
-      dispatch(openChat());
-    } else {
-      dispatch(closeChat());
-    }
-  }, [open]);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -209,7 +193,7 @@ export default function CustomAppBar({
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} className="allHeader">
-        <Toolbar className={`header-wrapper ${chatPosition ? "active" : ""}`}>
+        <Toolbar className={`header-wrapper `}>
           <MainDrawer navlinks={navLinks} />
 
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">

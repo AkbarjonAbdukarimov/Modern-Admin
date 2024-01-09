@@ -9,7 +9,6 @@ import IChat from "../../../../interfaces/IChat";
 import ListLoading from "../../../ListLoading";
 import { useNavigate } from "react-router-dom";
 import "../../../../style/chats/chat.scss";
-import { useAppSelector } from "../../../../store/store";
 
 const Renavigate = () => {
   const navigate = useNavigate();
@@ -28,10 +27,6 @@ export default function MessagingArea({
   chat: IChat | undefined;
 }) {
   const [loading, setLoading] = useState(true);
-  const chatPosition = useAppSelector(
-    (state) => state.chatPosition.chatPosition
-  );
-  
 
   if (!chat) {
     return <Renavigate />;
@@ -96,7 +91,7 @@ export default function MessagingArea({
               position: "absolute",
               bottom: 0,
             }}
-            className={`ms-4 selectedChat ${chatPosition ? "active" : ""}`}
+            className={`ms-4 selectedChat `}
           >
             {messages.map((m) => (
               <Message key={m.id} message={m} user={user} />
