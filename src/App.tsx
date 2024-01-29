@@ -39,6 +39,9 @@ import { socket } from "./socket";
 import Chat from "./components/pages/Chats/Chat";
 import MessagingArea from "./components/pages/Chats/Message/MessagingArea";
 import IChat from "./interfaces/IChat";
+import Index from "./components/pages";
+import InedxPage from "./components/pages";
+import NewSlide from "./components/pages/Slides/NewSlide";
 const queryClient = new QueryClient();
 
 export default function App() {
@@ -77,7 +80,10 @@ export default function App() {
                 />
 
                 <Routes>
-                  <Route path="/" />
+                  <Route
+                    path="/"
+                    element={admin.super ? <InedxPage /> : <Products />}
+                  />
                   <Route path="/products" element={<Products />} />
                   <Route path="/products/new" element={<NewProduct />} />
                   <Route path="/products/edit/:id" element={<EditProduct />} />
@@ -136,9 +142,15 @@ export default function App() {
                       <Route path="/vendors/:id" element={<Vendor />} />
                       <Route path="/vendors/new" element={<NewVendor />} />
                       <Route
+                        path="/vendors/:vendorId/:id"
+                        element={<Product />}
+                      />
+                      <Route
                         path="/vendors/edit/:id"
                         element={<EditVendor />}
                       />
+
+                      <Route path="/slides/new" element={<NewSlide />} />
                     </>
                   ) : (
                     <></>

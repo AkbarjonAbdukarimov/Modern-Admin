@@ -189,7 +189,7 @@ export default function CustomAppBar({
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", marginBottom: "100px" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} className="allHeader">
         <Toolbar className={`header-wrapper `}>

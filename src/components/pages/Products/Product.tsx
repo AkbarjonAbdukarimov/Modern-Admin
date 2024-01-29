@@ -1,5 +1,5 @@
-import axios from "axios";
-import React from "react";
+import axios, { AxiosError } from "axios";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import IProduct from "../../../interfaces/Product/IProduct";
 import { useQuery } from "react-query";
@@ -18,28 +18,45 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import { List, ListItem } from "@mui/material";
-const getProduct = (id:string) =>
-  axios
-    .get<IProduct>(`/products/${id}`)
-    .then((res) => res.data)
-    .catch((e) => e.response.data);
+import IError from "../../../interfaces/IError";
+import Errors from "../../Errors";
+
 export default function Product() {
-  const { id } = useParams();
-  //@ts-ignore
-  const product = useQuery<IProduct>(["product", id], ()=>getProduct(id));
+  const { id, vendorId } = useParams();
+  const [data, setData] = useState<IProduct>();
+  const [err, setError] = useState<IError[] | undefined>();
+
+  useEffect(() => {
+    axios
+      .get<IProduct>(
+        vendorId ? `/products/vendor/${vendorId}/${id}` : `/products/${id}`
+      )
+      .then((res) => setData(res.data))
+      .catch((e: any) => {
+        if (e instanceof AxiosError) {
+          setError(e.response?.data.errors);
+          return;
+        }
+        setError([{ message: e.message }]);
+      });
+  }, []);
+
   const [expanded, setExpanded] = React.useState(false);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  if (product.isLoading) {
-    return <Loading isLoading={product.isLoading} />;
+  if (!data && !err) {
+    return <Loading isLoading={!data} />;
   }
-  // if (product.data && product.data.author._id != admin.id) {
+  if (err) {
+    return <Errors errs={err} />;
+  }
+  // if (data && data.author._id != admin.id) {
   //   navigate("/products");
   // }
   return (
     <>
-      {product.data && (
+      {data && (
         <div className="d-flex justify-content-center mt-5">
           <Card sx={{ width: 345 }}>
             <CardHeader
@@ -48,32 +65,29 @@ export default function Product() {
               //       <MoreVertIcon />
               //     </IconButton>
               //   }
-              title={product.data.name}
+              title={data.name}
             />
-            {product.data.media.length > 0 && (
+            {data.media.length > 0 && (
               <CardMedia
                 component="img"
                 height="194"
-                image={
-                  "https://ik.imagekit.io/z6k3ktb71/" +
-                  product.data.media[0].name
-                }
-                alt={product.data.name}
+                image={"https://ik.imagekit.io/z6k3ktb71/" + data.media[0].name}
+                alt={data.name}
               />
             )}
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                {product.data.description}
+                {data.description}
               </Typography>
             </CardContent>
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                {product.data.category && product.data.category.name} Category
+                {data.category && data.category.name} Category
               </Typography>
             </CardContent>
             <CardContent>
               <Typography variant="body2" color="text.secondary">
-                {product.data.subcategory.name} Subcategory
+                {data.subcategory.name} Subcategory
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
@@ -81,13 +95,13 @@ export default function Product() {
                 <IconButton aria-label="add to favorites">
                   <FavoriteIcon />
                 </IconButton>
-                {product.data.likes.length}
+                {data.likes.length}
               </div>
               <div className="mx-1 d-flex justify-content-evenly align-items-center">
                 <IconButton aria-label="share">
                   <RemoveRedEyeIcon />
                 </IconButton>
-                {product.data.viewCount}
+                {data.viewCount}
               </div>
               <ExpandMore
                 expand={expanded}
@@ -102,19 +116,19 @@ export default function Product() {
               <CardContent>
                 <div className="my-2">
                   <Typography paragraph>Media</Typography>
-                  {product.data.media.length > 0 &&
-                    product.data.media.map((m) => (
+                  {data.media.length > 0 &&
+                    data.media.map((m) => (
                       <CardMedia
                         className="my-1"
                         key={m.name + m.fileId}
                         component="img"
                         height="194"
                         image={"https://ik.imagekit.io/z6k3ktb71/" + m.name}
-                        alt={product.data.name}
+                        alt={data.name}
                       />
                     ))}
                 </div>
-                {product.data.video && (
+                {data.video && (
                   <div className="my-3">
                     <Typography paragraph>Video</Typography>
 
@@ -122,15 +136,14 @@ export default function Product() {
                       <iframe
                         height="194"
                         src={
-                          "https://ik.imagekit.io/z6k3ktb71/" +
-                          product.data.video.name
+                          "https://ik.imagekit.io/z6k3ktb71/" + data.video.name
                         }
                       ></iframe>
                     </>
                   </div>
                 )}
                 <Typography paragraph>Properties:</Typography>
-                {product.data.props.map((i) => {
+                {data.props.map((i) => {
                   return (
                     <div key={i.id}>
                       <Typography>{i.name}</Typography>
@@ -147,7 +160,7 @@ export default function Product() {
                 <Typography paragraph>Price:</Typography>
 
                 <List aria-labelledby="basic-list-demo">
-                  {product.data.price.map((p) => (
+                  {data.price.map((p) => (
                     <ListItem key={p.price + p.qtyMax + p.qtyMin}>
                       Amount: {p.qtyMin}-{p.qtyMax} Price {p.price}
                     </ListItem>
@@ -158,6 +171,7 @@ export default function Product() {
           </Card>
         </div>
       )}
+      <Errors errs={err} />
     </>
   );
 }
